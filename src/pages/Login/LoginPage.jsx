@@ -7,6 +7,8 @@ import {
   Input,
   Button,
   Text,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 import { loginUser } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +19,15 @@ const LoginPage = () => {
     password: '',
   });
 
+  const [alertMessage, setAlertMessage] = useState(null);
   const navigate = useNavigate();
+
+  const showAlert = (message, type) => {
+    setAlertMessage({ message, type });
+    setTimeout(() => {
+        setAlertMessage(null);
+    }, 5000)
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +47,7 @@ const LoginPage = () => {
     } catch (error) {
         setFormData({ email: '', password: '' });
         console.error('Login error:', error.message);
+        showAlert('Login failed! Please try again.', 'error');
     }
 
   };
@@ -47,6 +58,12 @@ const LoginPage = () => {
         <Heading as="h2" size="lg" mb="4">
             Login
         </Heading>
+        { alertMessage && (
+            <Alert status={alertMessage.type} mb={'4'}>
+                <AlertIcon />
+                {alertMessage.message}
+            </Alert>
+        )}
         <form onSubmit={handleSubmit}>
             <FormControl mb="4">
             <FormLabel>Email</FormLabel>
