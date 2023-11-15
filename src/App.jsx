@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import Header from './components/Header/Header'
-import './App.css'
+import Sidebar from './components/Sidebar/Sidebar'
+import './styles/index.css'
+import theme from './theme'
 
 function App() {
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Header />
+      <Sidebar />
     </ChakraProvider>
   )
 }
