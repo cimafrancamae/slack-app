@@ -9,12 +9,15 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { loginUser } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,6 +33,7 @@ const LoginPage = () => {
     try {
         const response = await loginUser(formData);
         console.log('Login Successful:', response);
+        navigate("/home");
     } catch (error) {
         setFormData({ email: '', password: '' });
         console.error('Login error:', error.message);
@@ -65,11 +69,8 @@ const LoginPage = () => {
             />
             </FormControl>
             <Button type="submit" colorScheme="blue" mb="4">
-            Login
+                Login
             </Button>
-            {/* Display error message if login fails */}
-            {/* Replace this with actual error handling logic */}
-            {/* <Text color="red.500">Error: Invalid credentials</Text> */}
         </form>
         </Box>
     </div>

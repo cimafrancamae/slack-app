@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 
 const url = 'http://206.189.91.54/api/v1';
 
 export const loginUser = async (userData) => {
+
     try {
         const response = await fetch(`${url}/auth/sign_in`, {
             method: 'POST',
@@ -13,8 +15,15 @@ export const loginUser = async (userData) => {
 
         if(response.ok){
             const data = await response.json();
+            const accessToken = response.headers.get("access-token");
             console.log('Login Successful:', data);
-            return data;
+
+            if(data && accessToken){
+                localStorage.setItem('accessToken', accessToken);
+                return data;
+            } else {
+                throw new Error('Login Failed. Token not found in response.');
+            }
         } else {
             throw new Error('Login Failed. Invalid Credentials.');
         }
