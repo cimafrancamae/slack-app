@@ -8,6 +8,7 @@ import {
   Button,
   Text,
 } from '@chakra-ui/react';
+import { loginUser } from '../../services/api';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -23,12 +24,17 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic using formData (e.g., API request)
-    console.log('Login form submitted:', formData);
-    // Reset form fields
-    setFormData({ email: '', password: '' });
+    
+    try {
+        const response = await loginUser(formData);
+        console.log('Login Successful:', response);
+    } catch (error) {
+        setFormData({ email: '', password: '' });
+        console.error('Login error:', error.message);
+    }
+
   };
 
   return (
@@ -63,7 +69,7 @@ const LoginPage = () => {
             </Button>
             {/* Display error message if login fails */}
             {/* Replace this with actual error handling logic */}
-            <Text color="red.500">Error: Invalid credentials</Text>
+            {/* <Text color="red.500">Error: Invalid credentials</Text> */}
         </form>
         </Box>
     </div>
