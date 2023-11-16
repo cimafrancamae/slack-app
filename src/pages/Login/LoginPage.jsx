@@ -74,7 +74,7 @@ const LoginPage = () => {
   return (
     <div className="login-container">
         {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
-        <Box w="100%" maxW="400px" m="auto" mt="10">
+        <Box w="100%" maxW="400px" mt="10">
         <Heading as="h2" size="lg" mb="4">
             Login
         </Heading>
