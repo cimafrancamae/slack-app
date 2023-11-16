@@ -32,3 +32,7 @@ export const loginUser = async (userData) => {
         throw new Error('Login Failed. Please try again.');
     }
 }
+
+export const createUser = async (userData) => {
+    console.log(userData);
+}
