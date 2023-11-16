@@ -16,7 +16,7 @@ export const loginUser = async (userData) => {
         if(response.ok){
             const data = await response.json();
             const accessToken = response.headers.get("access-token");
-            console.log('Login Successful:', data);
+            console.log('Login Successful:', response.headers);
 
             if(data && accessToken){
                 localStorage.setItem('accessToken', accessToken);
