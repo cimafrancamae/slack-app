@@ -7,6 +7,10 @@ import {
   Input,
   Button,
   Text,
+  Alert,
+  AlertIcon,
+  useToast,
+  Progress,
 } from '@chakra-ui/react';
 import { loginUser } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +21,17 @@ const LoginPage = () => {
     password: '',
   });
 
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
+
+  const showAlert = (message, type) => {
+    setAlertMessage({ message, type });
+    setTimeout(() => {
+        setAlertMessage(null);
+    }, 5000)
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,24 +43,47 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     
     try {
         const response = await loginUser(formData);
-        console.log('Login Successful:', response);
-        navigate("/home");
+        if(response){
+            console.log('Login Successful:', response);
+            setLoading(false);
+            navigate("/home");
+    
+            toast({
+                title: 'Login Successful',
+                status: 'success',
+                position: 'bottom',
+                duration: 5000,
+                isClosable: true,
+            });
+        } else {
+            throw new Error('Login failed. Invalid response');
+        }
     } catch (error) {
         setFormData({ email: '', password: '' });
+        setLoading(false);
         console.error('Login error:', error.message);
+        showAlert('Login failed! Please try again.', 'error');
     }
 
   };
 
   return (
     <div className="login-container">
+        {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
         <Box w="100%" maxW="400px" m="auto" mt="10">
         <Heading as="h2" size="lg" mb="4">
             Login
         </Heading>
+        { alertMessage && (
+            <Alert status={alertMessage.type} mb={'4'}>
+                <AlertIcon />
+                {alertMessage.message}
+            </Alert>
+        )}
         <form onSubmit={handleSubmit}>
             <FormControl mb="4">
             <FormLabel>Email</FormLabel>
