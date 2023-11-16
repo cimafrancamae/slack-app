@@ -17,6 +17,14 @@ const router = createBrowserRouter([
     )
   },
   {
+    path: "/register",
+    element: (
+      <ChakraProvider theme={theme}>
+        {/* <LoginPage /> */}
+      </ChakraProvider>
+    )
+  },
+  {
     path: "/home",
     element: (
       <ProtectedRoute>
