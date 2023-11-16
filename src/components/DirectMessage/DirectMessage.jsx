@@ -2,27 +2,24 @@ import React from 'react';
 import { List, ListItem, Flex, Icon, Text } from '@chakra-ui/react';
 import { MdAdd } from 'react-icons/md';
 
-function Channel(props) {
+function DirectMessage(props) {
+    const directMessages = [];
 
-  const channels = [
-    { id: 1, name: '#general' },
-    { id: 2, name: '#random' },
-  ];
     return (
-        <List spacing={3}>
+        <List spacing={3} mt={10}>
           <ListItem fontWeight="bold" fontSize="lg">
             <Flex align="center" justify="space-between">
-              Channels
+              Direct messages
               <Icon as={MdAdd} ml="2" cursor="pointer" color="blue.500" />
             </Flex>
           </ListItem>
-          {channels.map((channel) => (
-            <ListItem key={channel.id}>
-              <Text>{channel.name}</Text>
+          {directMessages.map((message) => (
+            <ListItem key={message.id}>
+              <Text>{message.name}</Text>
             </ListItem>
           ))}
         </List>
     );
 }
 
-export default Channel;
+export default DirectMessage;
