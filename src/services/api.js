@@ -21,7 +21,7 @@ export const loginUser = async (userData) => {
             const uid = response.headers.get("uid");
 
             if(data && accessToken){
-                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('access-token', accessToken);
                 localStorage.setItem('client', client);
                 localStorage.setItem('expiry', expiry);
                 localStorage.setItem('uid', uid);
@@ -61,7 +61,7 @@ export const createUser = async (userData) => {
     }
 }
 
-export const fetchAllUsers = async () => {
+export const fetchAllUsers = () => {
     const headers = {
         'access-token': localStorage.getItem('access-token'),
         client: localStorage.getItem('client'),
