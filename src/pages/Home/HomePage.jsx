@@ -9,8 +9,7 @@ import useFetch from '../../utils/hooks/useFetch';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
 
-function HomePage(props) {
-    // console.log('home')
+function HomePage() {
     const { apiUrl, options } = fetchAllUsers();
     const { data, error, load } = useFetch(apiUrl, options);
 
@@ -18,10 +17,9 @@ function HomePage(props) {
     const toast = useToast();
     
     useEffect(() => {
-      console.log('home',{apiUrl, options});
     if (load) {
       console.log('Loading...');
-      setLoading(load)
+      setLoading(true)
     }
 
     if (error) {
