@@ -18,6 +18,7 @@ function HomePage(props) {
                     display="flex" 
                     flexDirection="column"
                     bg="gray.50"
+                    boxShadow="md"
                 >
                     <Box flex="1">
                         <MessageList />

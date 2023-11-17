@@ -84,7 +84,12 @@ const LoginPage = () => {
           mt="10" 
           textAlign="center"
         >
-        <Flex align="center" justify="center" direction="column" gap="10">
+        <Flex 
+          align="center" 
+          justify="center" 
+          direction="column" 
+          gap="10"
+        >
           <Image 
             src={logo} 
             alt="Slack App Logo" 
