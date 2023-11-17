@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 const url = 'http://206.189.91.54/api/v1';
 
 export const loginUser = async (userData) => {
@@ -14,12 +12,19 @@ export const loginUser = async (userData) => {
         });
 
         if(response.ok){
+            console.log('Login Successful:', response.headers);
+
             const data = await response.json();
             const accessToken = response.headers.get("access-token");
-            console.log('Login Successful:', response.headers);
+            const client = response.headers.get("client");
+            const expiry = response.headers.get("expiry");
+            const uid = response.headers.get("uid");
 
             if(data && accessToken){
                 localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('client', client);
+                localStorage.setItem('expiry', expiry);
+                localStorage.setItem('uid', uid);
                 return data;
             } else {
                 throw new Error('Login Failed. Token not found in response.');
@@ -55,3 +60,21 @@ export const createUser = async (userData) => {
         throw new Error('Registration Unsuccessful!', error.message);
     }
 }
+
+export const fetchAllUsers = async () => {
+    const headers = {
+        'access-token': localStorage.getItem('access-token'),
+        client: localStorage.getItem('client'),
+        expiry: localStorage.getItem('expiry'),
+        uid: localStorage.getItem('uid'),
+      };
+    
+      const options = {
+        method: 'GET',
+        headers: headers,
+      };
+
+      const apiUrl = `${url}/users`;
+    
+      return { apiUrl, options }
+  };
