@@ -1,5 +1,5 @@
 import { Flex, Input, Avatar, IconButton } from '@chakra-ui/react';
-import { SearchIcon, BellIcon } from '@chakra-ui/icons';
+import { BellIcon } from '@chakra-ui/icons';
 import logo from '../../../public/slack-logo.png'
 
 const Header = () => {

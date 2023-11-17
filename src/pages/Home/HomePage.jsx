@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { Outlet } from 'react-router-dom';
 import MessageList from '../../components/MessageList/MessageList';
 import MessageInput from '../../components/MessageInput/MessageInput';
 import { Flex, Box } from '@chakra-ui/layout';

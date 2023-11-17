@@ -1,4 +1,14 @@
 .signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 100vh;
+    padding-top: 5rem;
+    // padding-bottom: 2rem;
+
+    a {
+        color: #C53030;
+    }
 }
