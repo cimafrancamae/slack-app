@@ -7,7 +7,7 @@ const Sidebar = () => {
     <div className="sidebar-container">
       <Box
         w="250px"
-        minHeight="calc(100vh - 80px)"
+        minHeight="calc(100vh - 150px)"
         bg="gray.200"
         p="4"
         borderRight="1px solid"

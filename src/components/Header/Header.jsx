@@ -1,10 +1,15 @@
 import { Flex, Input, Avatar, IconButton } from '@chakra-ui/react';
-import { SearchIcon, BellIcon } from '@chakra-ui/icons';
+import { BellIcon } from '@chakra-ui/icons';
 import logo from '../../../public/slack-logo.png'
 
 const Header = () => {
   return (
-    <Flex justify="space-between" align="center" p="4" boxShadow="md">
+    <Flex 
+      justify="space-between" 
+      align="center" 
+      p="4" 
+      boxShadow="md"
+    >
       <div>
         <img src={logo} className='header-logo' title='logo' />
       </div>

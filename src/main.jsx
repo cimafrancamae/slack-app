@@ -6,6 +6,7 @@ import LoginPage from './pages/Login/LoginPage.jsx'
 import HomePage from './pages/Home/HomePage.jsx'
 import ProtectedRoute from './ProtectedRoute.jsx'
 import theme from './theme'
+import SignupPage from './pages/Signup/SignupPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
     path: "/register",
     element: (
       <ChakraProvider theme={theme}>
-        {/* <LoginPage /> */}
+        <SignupPage />
       </ChakraProvider>
     )
   },

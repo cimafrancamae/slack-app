@@ -32,3 +32,26 @@ export const loginUser = async (userData) => {
         throw new Error('Login Failed. Please try again.');
     }
 }
+
+export const createUser = async (userData) => {
+    console.log(userData);
+    try {
+        const response = await fetch(`${url}/auth`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData)
+        })
+
+        if(response.ok) {
+            console.log('Registration Successful', response)
+            const data = await response.json();
+            return data;
+        } else {
+            throw new Error('Registration Unsuccessful!', response);
+        }
+    } catch (error) {
+        throw new Error('Registration Unsuccessful!', error.message);
+    }
+}

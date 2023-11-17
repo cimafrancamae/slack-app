@@ -6,22 +6,24 @@ import {
   FormLabel,
   Input,
   Button,
-  Text,
   Alert,
   AlertIcon,
   useToast,
   Progress,
   Image,
-  Flex,
+  Flex
 } from '@chakra-ui/react';
-import { loginUser } from '../../services/api';
-import { useNavigate, Link } from 'react-router-dom';
+import { createUser } from '../../services/api'; 
+import { useNavigate } from 'react-router-dom';
 import logo from '../../../public/slack-with-name-logo.png';
 
-const LoginPage = () => {
+const SignupPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    password_confirmation: '',
+    firstName: '',
+    lastName: '',
   });
 
   const [alertMessage, setAlertMessage] = useState(null);
@@ -49,33 +51,42 @@ const LoginPage = () => {
     setLoading(true);
     
     try {
-        const response = await loginUser(formData);
+        const response = await createUser(formData);
         if(response){
-            console.log('Login Successful:', response);
+            console.log('Registration Successful:', response);
             setLoading(false);
-            navigate("/home");
+            navigate("/");
     
             toast({
-                title: 'Login Successful',
+                title: 'Registration Successful',
                 status: 'success',
                 position: 'bottom',
                 duration: 5000,
                 isClosable: true,
             });
         } else {
-            throw new Error('Login failed. Invalid response');
+            throw new Error('Registration failed. Invalid response');
         }
     } catch (error) {
-        setFormData({ email: '', password: '' });
+        setFormData({ 
+          email: '', 
+          password: '', 
+          password_confirmation: '', 
+          firstName: '', 
+          lastName: '', 
+        });
         setLoading(false);
-        console.error('Login error:', error.message);
-        showAlert('Login failed! Please try again.', 'error');
+        console.error('Registration error:', error.message);
+        showAlert('Registration failed! Please try again.', 'error');
     }
+  };
 
+  const handleCancel = () => {
+    navigate("/"); 
   };
 
   return (
-    <div className="login-container">
+    <div className="signup-container">
         {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
         <Box 
           w="100%" 
@@ -97,50 +108,77 @@ const LoginPage = () => {
             maxW="100px" 
           />
           <Heading as="h2" size="lg" mb="4">
-              Login
+              Sign Up
           </Heading>
           { alertMessage && (
-              <Alert status={alertMessage.type} mb={'4'} maxW="400px">
+              <Alert status={alertMessage.type} mb={'4'}>
                   <AlertIcon />
                   {alertMessage.message}
               </Alert>
           )}
           <form onSubmit={handleSubmit}>
               <FormControl mb="4">
-              <FormLabel>Email</FormLabel>
-              <Input
+                <FormLabel>First Name</FormLabel>
+                <Input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  placeholder="Enter your first name"
+                  w="400px"
+                />
+              </FormControl>
+              <FormControl mb="4">
+                <FormLabel>Last Name</FormLabel>
+                <Input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  placeholder="Enter your last name"
+                />
+              </FormControl>
+              <FormControl mb="4">
+                <FormLabel>Email</FormLabel>
+                <Input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Enter your email"
-                  w="400px"
-              />
+                />
               </FormControl>
               <FormControl mb="4">
-              <FormLabel>Password</FormLabel>
-              <Input
+                <FormLabel>Password</FormLabel>
+                <Input
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Enter your password"
-              />
+                />
+              </FormControl>
+              <FormControl mb="4">
+                <FormLabel>Password Confirmation</FormLabel>
+                <Input
+                  type="password"
+                  name="password_confirmation"
+                  value={formData.password_confirmation}
+                  onChange={handleInputChange}
+                  placeholder="Confirm your password"
+                />
               </FormControl>
               <Button type="submit" colorScheme="blue" mb="4" w="100%">
-                  Login
+                  Sign Up
               </Button>
+              <Button variant="outline" colorScheme="blue" mb="4" w="100%" onClick={handleCancel}>
+                    Cancel
+                </Button>
             </form>
-            <Text mb="4">
-            {"Don't have an account? "}
-              <Link to="/register" ml="1">
-                Create one here
-              </Link>
-            </Text>
         </Flex>
         </Box>
     </div>
   );
 };
 
-export default LoginPage;
+export default SignupPage;
