@@ -60,7 +60,7 @@ const SignupPage = () => {
             toast({
                 title: 'Registration Successful',
                 status: 'success',
-                position: 'bottom',
+                position: 'top',
                 duration: 5000,
                 isClosable: true,
             });

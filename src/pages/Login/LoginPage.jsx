@@ -53,15 +53,16 @@ const LoginPage = () => {
         if(response){
             console.log('Login Successful:', response);
             setLoading(false);
-            navigate("/home");
-    
+            
             toast({
-                title: 'Login Successful',
-                status: 'success',
-                position: 'bottom',
-                duration: 5000,
-                isClosable: true,
+              title: 'Login Successful',
+              status: 'success',
+              position: 'bottom',
+              duration: 5000,
+              isClosable: true,
             });
+
+            navigate("/home");
         } else {
             throw new Error('Login failed. Invalid response');
         }

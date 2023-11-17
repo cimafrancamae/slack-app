@@ -12,31 +12,27 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ChakraProvider theme={theme}>
-        <LoginPage />
-      </ChakraProvider>
+      <LoginPage />
     )
   },
   {
     path: "/register",
     element: (
-      <ChakraProvider theme={theme}>
-        <SignupPage />
-      </ChakraProvider>
+      <SignupPage />
     )
   },
   {
     path: "/home",
     element: (
       <ProtectedRoute>
-        <ChakraProvider theme={theme}>
           <HomePage />
-        </ChakraProvider>
       </ProtectedRoute>
     )
   }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
+  <ChakraProvider theme={theme}>
+    <RouterProvider router={router} />
+  </ChakraProvider>
 );
