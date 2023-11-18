@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { List, ListItem, Flex, Icon, Text } from '@chakra-ui/react';
 import { MdAdd } from 'react-icons/md';
-import SearchUserModal from '../common/SearchUserModal';
+import SearchUserModal from '../../common/SearchUserModal';
 
 function DirectMessage(props) {
     const directMessages = [];
@@ -21,12 +21,6 @@ function DirectMessage(props) {
 
     return (
       <>
-        <SearchUserModal 
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          users={users}
-          onUserSelect={handleSelectedUser}
-        />
         <List spacing={3} mt={10}>
           <ListItem fontWeight="bold" fontSize="lg">
             <Flex align="center" justify="space-between">
