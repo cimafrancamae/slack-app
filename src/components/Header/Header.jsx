@@ -7,18 +7,19 @@ const Header = () => {
     <Flex 
       justify="space-between" 
       align="center" 
-      p="4" 
+      paddingY="2"
+      paddingX="4" 
       boxShadow="md"
     >
       <div>
         <img src={logo} className='header-logo' title='logo' />
       </div>
 
-      <Input placeholder="Search..." maxW="xs" mr="4" />
+      <Input placeholder="Search..." maxW="lg" mr="4" size="xs" />
 
       <Flex align="center">
-        <IconButton aria-label="Search notifications" icon={<BellIcon />} mr="4" />
-        <Avatar size="sm" name="User" />
+        <IconButton aria-label="Search notifications" icon={<BellIcon />} mr="4" size="xs"/>
+        <Avatar size="xs" name="User" />
       </Flex>
     </Flex>
   );

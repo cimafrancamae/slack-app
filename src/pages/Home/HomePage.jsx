@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import MessageList from '../../components/MessageList/MessageList';
-import MessageInput from '../../components/MessageInput/MessageInput';
+import MessageList from '../../components/Dashboard/MessageList/MessageList';
+import MessageInput from '../../components/Dashboard/MessageInput/MessageInput';
 import { Flex, Box } from '@chakra-ui/layout';
 import { fetchAllUsers } from '../../services/api';
 import useFetch from '../../utils/hooks/useFetch';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
+import SearchUserModal from '../../components/common/SearchUserModal';
+import Dashboard from '../../components/Dashboard/Dashboard';
 
 function HomePage() {
     const { apiUrl, options } = fetchAllUsers();
     const { data, error, load } = useFetch(apiUrl, options);
+    const [isOpen, setIsOpen] = useState(false);
 
     const toast = useToast();
 
@@ -41,21 +44,7 @@ function HomePage() {
             <Header />
             <Flex>
                 <Sidebar />
-                <Box 
-                    flex="1" 
-                    p="4" 
-                    display="flex" 
-                    flexDirection="column"
-                    bg="gray.50"
-                    boxShadow="md"
-                >
-                    <Box flex="1">
-                        <MessageList />
-                    </Box>
-                    <Box mt="3">
-                        <MessageInput />
-                    </Box>
-                </Box>
+                <Dashboard />
             </Flex>
         </div>
     );
