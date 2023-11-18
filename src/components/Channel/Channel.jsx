@@ -5,8 +5,8 @@ import { MdAdd } from 'react-icons/md';
 function Channel(props) {
 
   const channels = [
-    { id: 1, name: '#general' },
-    { id: 2, name: '#random' },
+    { id: 1, name: '# general' },
+    { id: 2, name: '# random' },
   ];
     return (
         <List spacing={3}>

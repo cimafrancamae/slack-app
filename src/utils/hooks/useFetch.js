@@ -25,7 +25,7 @@ const useFetch = (url, options = {}) => {
     };
 
     fetchData();
-  }, [url, options]);
+  }, []); //figure out why infinite loop [url, options]
 
   return { data, error, load };
 };
