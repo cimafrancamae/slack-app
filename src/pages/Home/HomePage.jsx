@@ -13,36 +13,31 @@ function HomePage() {
     const { apiUrl, options } = fetchAllUsers();
     const { data, error, load } = useFetch(apiUrl, options);
 
-    const [loading, setLoading] = useState(false);
     const toast = useToast();
-    
+
+    useEffect(()=> {
+        if(error){
+            console.error('Error:', error.message);
+            toast({
+                title: 'Failed to load all users',
+                status: 'error',
+                position: 'top',
+                duration: 5000,
+                isClosable: true
+            });
+        }
+    }, [error]);
+
     useEffect(() => {
-    if (load) {
-      console.log('Loading...');
-      setLoading(true)
-    }
-
-    if (error) {
-      console.error('Error:', error.message);
-      toast({
-        title: 'Failed to load all users',
-        status: 'error',
-        position: 'top',
-        duration: 5000,
-        isClosable: true
-      });
-    }
-
-    if (data) {
-      console.log('All Users:', data);
-      localStorage.setItem('users',JSON.stringify(data))
-      setLoading(false)
-    }
-  }, []);
+        if (data) {
+            console.log('All Users:', data);
+            localStorage.setItem('users',JSON.stringify(data));
+        }
+    }, [data]);
 
     return (
         <div className='home-container'>
-            {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
+            {load && <Progress size="xs" isIndeterminate colorScheme='blue' />}
             <Header />
             <Flex>
                 <Sidebar />
