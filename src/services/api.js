@@ -1,4 +1,10 @@
 const url = 'http://206.189.91.54/api/v1';
+const headers = {
+    'access-token': localStorage.getItem('access-token'),
+    client: localStorage.getItem('client'),
+    expiry: localStorage.getItem('expiry'),
+    uid: localStorage.getItem('uid'),
+};
 
 export const loginUser = async (userData) => {
 
@@ -62,12 +68,12 @@ export const createUser = async (userData) => {
 }
 
 export const fetchAllUsers = () => {
-    const headers = {
-        'access-token': localStorage.getItem('access-token'),
-        client: localStorage.getItem('client'),
-        expiry: localStorage.getItem('expiry'),
-        uid: localStorage.getItem('uid'),
-      };
+    // const headers = {
+    //     'access-token': localStorage.getItem('access-token'),
+    //     client: localStorage.getItem('client'),
+    //     expiry: localStorage.getItem('expiry'),
+    //     uid: localStorage.getItem('uid'),
+    //   };
     
       const options = {
         method: 'GET',
@@ -78,3 +84,17 @@ export const fetchAllUsers = () => {
     
       return { apiUrl, options }
   };
+
+  export const sendMessage = (user) => {
+    const headers ={
+
+    }
+
+    const options = {
+
+    }
+
+    const body = {
+
+    }
+  } 
