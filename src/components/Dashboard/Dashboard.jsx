@@ -4,7 +4,7 @@ import MessageList from './MessageList/MessageList';
 import MessageInput from './MessageInput/MessageInput';
 import MessageHeader from './MessageHeader/MessageHeader';
 
-function Dashboard() {
+function Dashboard({ signedInUser }) {
     const users = JSON.parse(localStorage.getItem('users'));
 
     const onSendMessage = (message) => {
@@ -21,9 +21,7 @@ function Dashboard() {
                 boxShadow="md"
             >
                 <Box>
-                    <MessageHeader 
-                        users={users} 
-                    />
+                    <MessageHeader users={users} signedInUser={signedInUser} />
                 </Box>
                 <Box flex="1">
                     <MessageList />
