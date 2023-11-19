@@ -33,7 +33,6 @@ function HomePage() {
 
     useEffect(() => {
         if (data) {
-            console.log('All Users:', data);
             localStorage.setItem('users',JSON.stringify(data));
         }
     }, [data]);
