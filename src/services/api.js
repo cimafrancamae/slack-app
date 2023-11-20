@@ -68,13 +68,6 @@ export const createUser = async (userData) => {
 }
 
 export const fetchAllUsers = () => {
-    // const headers = {
-    //     'access-token': localStorage.getItem('access-token'),
-    //     client: localStorage.getItem('client'),
-    //     expiry: localStorage.getItem('expiry'),
-    //     uid: localStorage.getItem('uid'),
-    //   };
-    
       const options = {
         method: 'GET',
         headers: headers,
@@ -85,16 +78,15 @@ export const fetchAllUsers = () => {
       return { apiUrl, options }
   };
 
-  export const sendMessage = (user) => {
-    const headers ={
-
-    }
+  export const sendMessage = (body) => {
 
     const options = {
+        method: 'POST',
+        headers: headers,
+        body: body
+    };
 
-    }
+    const apiUrl = `${url}/messages`;
 
-    const body = {
-
-    }
+    return { apiUrl, options };
   } 

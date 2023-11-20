@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import SelectUser from './SelectUser';
+import SelectUser from './components/SelectUser';
 
 function MessageHeader({ users }) {
     

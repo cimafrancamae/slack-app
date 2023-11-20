@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Text, Input, List, ListItem, Avatar, InputGroup, InputLeftAddon } from '@chakra-ui/react';
-import { flattenArray } from '../../../utils/helper';
+import { flattenArray } from '../../../../utils/helper';
 
 function SelectUser({ users, onSelectUser }) {
     const [searchQuery, setSearchQuery] = useState('');
