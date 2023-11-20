@@ -38,7 +38,7 @@ const Header = ({ signedInUser }) => {
           mr="4" 
           size="xs"
         />
-        <Popover placement="bottom-end">
+        <Popover placement="bottom-end" >
           <PopoverTrigger>
             <Avatar 
               size="xs" 
@@ -49,7 +49,12 @@ const Header = ({ signedInUser }) => {
               <AvatarBadge boxSize='1.25em' bg='green.500' />
             </Avatar>
           </PopoverTrigger>
-          <PopoverContent w="max-content" minW="200px" borderColor="gray.300">
+          <PopoverContent 
+            w="max-content" 
+            minW="200px" 
+            borderColor="gray.300" 
+            boxShadow="lg"
+          >
             <LogoutPopover 
               handlePopOver={handlePopOver} 
               signedInUser={signedInUser} 

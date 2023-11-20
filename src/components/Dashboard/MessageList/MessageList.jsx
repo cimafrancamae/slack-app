@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
+import MessageListHeader from './components/MessageListHeader';
 
 const MessageList = ({ messages }) => {
     const messageList = messages ? messages : [];
@@ -10,6 +11,7 @@ const MessageList = ({ messages }) => {
         h="100%"
         overflowY="auto"
     >
+      <MessageListHeader />
       {messageList.map((message, index) => (
         <Box 
             key={index} 

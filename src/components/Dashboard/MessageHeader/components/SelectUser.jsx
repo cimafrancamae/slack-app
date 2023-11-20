@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Box, Text, Input, List, ListItem, Avatar, InputGroup, InputLeftAddon } from '@chakra-ui/react';
-import { flattenArray } from '../../../utils/helper';
+import { flattenArray } from '../../../../utils/helper';
 
-function SelectUser({ users }) {
+function SelectUser({ users, onSelectUser }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
 
@@ -26,7 +26,7 @@ function SelectUser({ users }) {
         const userName = user.email.split('@')[0]
         setSelectedUser(user.id);
         setSearchQuery(userName);
-        console.log(selectedUser)
+        onSelectUser(user);
       }
 
     return (

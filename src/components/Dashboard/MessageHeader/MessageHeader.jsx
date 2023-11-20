@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import SelectUser from './SelectUser';
+import SelectUser from './components/SelectUser';
 
 function MessageHeader({ users }) {
     
@@ -7,6 +8,18 @@ function MessageHeader({ users }) {
     const directMessage = localStorage.getItem('direct-message') || null;
 
     const title = channel ? channel : directMessage ? directMessage : 'New Message';
+
+    const [selectedUser, setSelectedUser] = useState(null);
+
+    const onSelectUser = (user) => {
+        setSelectedUser(user)
+    }
+
+    useEffect(() => {
+        console.log(selectedUser)
+    },[selectedUser])
+
+    
     
     return (
         <>
@@ -22,7 +35,7 @@ function MessageHeader({ users }) {
                     {title}
                 </Text>
             </Box>
-            <SelectUser users={users} />
+            <SelectUser users={users} onSelectUser={onSelectUser} />
         </>
     );
 }
