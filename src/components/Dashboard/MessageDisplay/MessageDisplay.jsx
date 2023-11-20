@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Text } from '@chakra-ui/react';
-import MessageListHeader from './components/MessageListHeader';
+import MessageDisplayHeader from './components/MessageDisplayHeader';
 
-const MessageList = ({ messages }) => {
+const MessageDisplay = ({ messages }) => {
     const messageList = messages ? messages : [];
   return (
     <Box 
@@ -11,7 +11,7 @@ const MessageList = ({ messages }) => {
         h="100%"
         overflowY="auto"
     >
-      <MessageListHeader />
+      <MessageDisplayHeader />
       {messageList.map((message, index) => (
         <Box 
             key={index} 
@@ -25,4 +25,4 @@ const MessageList = ({ messages }) => {
   );
 };
 
-export default MessageList;
+export default MessageDisplay;

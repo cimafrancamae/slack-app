@@ -5,9 +5,9 @@ import SelectUser from './components/SelectUser';
 function MessageHeader({ users }) {
     
     const channel = localStorage.getItem('channel') || null;
-    const directMessage = localStorage.getItem('direct-message') || null;
+    const newMessage = localStorage.getItem('new-msg') || null;
 
-    const title = channel ? channel : directMessage ? directMessage : 'New Message';
+    const title = channel ? channel : newMessage ? newMessage : 'New Message';
 
     const [selectedUser, setSelectedUser] = useState(null);
 
@@ -17,10 +17,14 @@ function MessageHeader({ users }) {
 
     useEffect(() => {
         console.log(selectedUser)
+        if(selectedUser){
+            const receiver = selectedUser;
+            const receiver_class = "User";
+            const data = newMessage.push({ receiver, receiver_class });
+            localStorage.setItem('new-msg', JSON.stringify(data));
+        }
     },[selectedUser])
-
-    
-    
+ 
     return (
         <>
             <Box 

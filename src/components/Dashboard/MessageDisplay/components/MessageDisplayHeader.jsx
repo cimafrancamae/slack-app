@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
 
-function MessageListHeader({ receiver }) {
+function MessageDisplayHeader({ receiver }) {
     return (
         <Box>
             
@@ -9,4 +9,4 @@ function MessageListHeader({ receiver }) {
     );
 }
 
-export default MessageListHeader;
+export default MessageDisplayHeader;

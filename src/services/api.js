@@ -6,6 +6,9 @@ const headers = {
     uid: localStorage.getItem('uid'),
 };
 
+let options = {};
+let apiUrl = '';
+
 export const loginUser = async (userData) => {
 
     try {
@@ -75,18 +78,74 @@ export const fetchAllUsers = () => {
 
       const apiUrl = `${url}/users`;
     
-      return { apiUrl, options }
-  };
+      return { apiUrl, options };
+};
 
-  export const sendMessage = (body) => {
-
-    const options = {
-        method: 'POST',
-        headers: headers,
-        body: body
+export const fetchUserChannels = () => {
+    options = {
+        method: 'GET',
+        headers: headers
     };
 
-    const apiUrl = `${url}/messages`;
+    apiUrl = `${url}/channels`;
 
     return { apiUrl, options };
-  } 
+}
+
+export const fetchMessage = (receiverId, receiverClass) => {
+    options = {
+        method: 'GET',
+        headers: headers
+    };
+
+    apiUrl = `${url}/messages?receiver_id=${receiverId}&receiver_class=${receiverClass}`;
+
+    return { apiUrl, options };
+};
+
+export const sendMessage = (requestBody) => {
+    options = {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(requestBody)
+    };
+
+    apiUrl = `${url}/messages`;
+
+    return { apiUrl, options };
+};
+
+export const createChannel = (requestBody) => {
+    options = {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(requestBody)
+    };
+
+    apiUrl = `${url}/channels`;
+
+    return { apiUrl, options };
+};
+
+export const fetchChannel = (channelId) => {
+    options = {
+        method: 'GET',
+        headers: headers
+    };
+
+    apiUrl = `${url}/channels/${channelId}`;
+
+    return { apiUrl, options };
+};
+
+export const addChannelMember = (requestBody) => {
+    options = {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(requestBody)
+    };
+
+    apiUrl = `${url}/channel/add_member`;
+
+    return { apiUrl, options };
+}
