@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import ChannelList from './Channel/ChannelList';
 import DirectMessageList from './DirectMessage/DirectMessageList';
-const Sidebar = () => {
+const Sidebar = ({ channels }) => {
 
   return (
     <div className="sidebar-container">

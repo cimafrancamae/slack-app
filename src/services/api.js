@@ -1,3 +1,5 @@
+import useFetch from "../utils/hooks/useFetch";
+
 const url = 'http://206.189.91.54/api/v1';
 const headers = {
     'access-token': localStorage.getItem('access-token'),
@@ -71,14 +73,16 @@ export const createUser = async (userData) => {
 }
 
 export const fetchAllUsers = () => {
-      const options = {
-        method: 'GET',
-        headers: headers,
-      };
+    const options = {
+    method: 'GET',
+    headers: headers,
+    };
 
-      const apiUrl = `${url}/users`;
-    
-      return { apiUrl, options };
+    const apiUrl = `${url}/users`;
+
+    const { data, error, load } = useFetch(apiUrl, options);
+
+    return { data, error, load };
 };
 
 export const fetchUserChannels = () => {
@@ -89,7 +93,9 @@ export const fetchUserChannels = () => {
 
     apiUrl = `${url}/channels`;
 
-    return { apiUrl, options };
+    const { data, error, load } = useFetch(apiUrl, options);
+
+    return { data, error, load };
 }
 
 export const fetchMessage = (receiverId, receiverClass) => {
@@ -113,6 +119,8 @@ export const sendMessage = (requestBody) => {
     apiUrl = `${url}/messages`;
 
     return { apiUrl, options };
+
+    // const response = useFetch()
 };
 
 export const createChannel = (requestBody) => {
