@@ -93,8 +93,6 @@ export const fetchUserChannels = () => {
 
     apiUrl = `${url}/channels`;
 
-    // return { apiUrl, options };
-
     const { data, error, load } = useFetch(apiUrl, options);
 
     return { data, error, load };

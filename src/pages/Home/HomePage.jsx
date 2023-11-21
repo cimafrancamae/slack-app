@@ -3,7 +3,6 @@ import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { Flex } from '@chakra-ui/layout';
 import { fetchAllUsers, fetchUserChannels } from '../../services/api';
-import useFetch from '../../utils/hooks/useFetch';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
 import Dashboard from '../../components/Dashboard/Dashboard';
@@ -19,29 +18,41 @@ function HomePage() {
 
     const toast = useToast();
 
-    useEffect(() => {
-        console.log('channels',channels);
-    },[channels])
-
     useEffect(()=> {
-        if(users.error){
-            console.error('Error:', users.error.message);
+        let toastTitle = '';
+
+        if(channels.error || users.error){
+            if(channels.error) {
+                console.error('Error:', channels.error.message);
+                toastTitle = 'Failed to load all channels';
+            }
+    
+            if(users.error){
+                console.error('Error:', users.error.message);
+                toastTitle = 'Failed to load all users';
+            }
+    
             toast({
-                title: 'Failed to load all users',
+                title: toastTitle,
                 status: 'error',
                 position: 'top',
                 duration: 5000,
                 isClosable: true
             });
         }
-    }, [users]);
 
-    useEffect(() => {
         if (users.data) {
             setLoading(users.load);
             localStorage.setItem('users',JSON.stringify(users.data));
         }
-    }, [users]);
+
+        if (channels.data) {
+            setLoading(channels.load);
+            localStorage.setItem('channels',JSON.stringify(channels.data));
+        }
+
+        console.log(users, channels)
+    }, [users, channels]);
 
     return (
         <div className='home-container'>
