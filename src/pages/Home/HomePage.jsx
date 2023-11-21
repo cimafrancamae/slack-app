@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { Flex } from '@chakra-ui/layout';
-import { fetchAllUsers } from '../../services/api';
+import { fetchAllUsers, fetchUserChannels } from '../../services/api';
 import useFetch from '../../utils/hooks/useFetch';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
@@ -12,14 +12,20 @@ function HomePage() {
     const uid = localStorage.getItem('uid').split('@')[0];
     const signedInUser = uid.charAt(0).toUpperCase().concat(uid.slice(1));
 
-    const { apiUrl, options } = fetchAllUsers();
-    const { data, error, load } = useFetch(apiUrl, options);
+    const [loading, setLoading] = useState(false);
+
+    const users = fetchAllUsers();
+    const channels = fetchUserChannels();
 
     const toast = useToast();
 
+    useEffect(() => {
+        console.log('channels',channels);
+    },[channels])
+
     useEffect(()=> {
-        if(error){
-            console.error('Error:', error.message);
+        if(users.error){
+            console.error('Error:', users.error.message);
             toast({
                 title: 'Failed to load all users',
                 status: 'error',
@@ -28,20 +34,21 @@ function HomePage() {
                 isClosable: true
             });
         }
-    }, [error]);
+    }, [users]);
 
     useEffect(() => {
-        if (data) {
-            localStorage.setItem('users',JSON.stringify(data));
+        if (users.data) {
+            setLoading(users.load);
+            localStorage.setItem('users',JSON.stringify(users.data));
         }
-    }, [data]);
+    }, [users]);
 
     return (
         <div className='home-container'>
-            {load && <Progress size="xs" isIndeterminate colorScheme='blue' />}
+            {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
             <Header signedInUser={signedInUser} />
             <Flex>
-                <Sidebar />
+                <Sidebar channels={channels} />
                 <Dashboard />
             </Flex>
         </div>

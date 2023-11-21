@@ -4,10 +4,10 @@ import SelectUser from './components/SelectUser';
 
 function MessageHeader({ users }) {
     
-    const channel = localStorage.getItem('channel') || null;
-    const newMessage = localStorage.getItem('new-msg') || null;
+    // const channel = localStorage.getItem('channel') || null;
+    const messages = localStorage.getItem('messages') || [];
 
-    const title = channel ? channel : newMessage ? newMessage : 'New Message';
+    const title = messages ? messages : 'New Message';
 
     const [selectedUser, setSelectedUser] = useState(null);
 
@@ -20,8 +20,8 @@ function MessageHeader({ users }) {
         if(selectedUser){
             const receiver = selectedUser;
             const receiver_class = "User";
-            const data = newMessage.push({ receiver, receiver_class });
-            localStorage.setItem('new-msg', JSON.stringify(data));
+            messages.push({ receiver, receiver_class });
+            localStorage.setItem('messages', JSON.stringify(messages));
         }
     },[selectedUser])
  

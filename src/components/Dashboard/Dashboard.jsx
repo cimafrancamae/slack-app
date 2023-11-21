@@ -10,7 +10,7 @@ import { Toast } from '@chakra-ui/react';
 
 function Dashboard({ signedInUser }) {
     const users = JSON.parse(localStorage.getItem('users'));
-    const newMessage = JSON.parse(localStorage.getItem('new-msg'));
+    const messages = JSON.parse(localStorage.getItem('messages'));
 
     const [message, setMessage] = useState('');
     const [requestBody, setRequestBody] = useState({});
@@ -24,10 +24,10 @@ function Dashboard({ signedInUser }) {
     }
 
     useEffect(() => {
-        if(newMessage){
+        if(messages){
             const body = {
-                "receiver_id": newMessage.receiver.id,
-                "receiver_class": newMessage.receiver_class,
+                "receiver_id": messages.receiver.id,
+                "receiver_class": messages.receiver_class,
                 "body": message,
             }
 

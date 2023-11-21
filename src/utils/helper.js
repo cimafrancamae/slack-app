@@ -1,3 +1,7 @@
-export function flattenArray (arr) {
+export function flattenArray(arr) {
     return arr.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenArray(val)) : acc.concat(val), [])
+}
+
+export function getUserMessages(receiverId) {
+    
 }
