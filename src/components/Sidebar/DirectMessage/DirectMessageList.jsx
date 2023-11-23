@@ -3,7 +3,7 @@ import { List, ListItem, Flex, Icon, Text } from '@chakra-ui/react';
 import { MdAdd } from 'react-icons/md';
 import SearchUserModal from '../../common/SearchUserModal';
 
-function DirectMessage(props) {
+function DirectMessage({ receivers }) {
     const directMessages = [];
     const users = JSON.parse(localStorage.getItem('users'));
 

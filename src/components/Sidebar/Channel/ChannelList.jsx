@@ -1,13 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { List, ListItem, Flex, Icon, Text } from '@chakra-ui/react';
 import { MdAdd } from 'react-icons/md';
 
-function Channel(props) {
+function Channel({ channels }) {
 
-  const channels = [
-    { id: 1, name: '# general' },
-    { id: 2, name: '# random' },
-  ];
     return (
         <List spacing={3}>
           <ListItem fontWeight="bold" fontSize="lg">
@@ -17,8 +13,12 @@ function Channel(props) {
             </Flex>
           </ListItem>
           {channels.map((channel) => (
-            <ListItem key={channel.id}>
-              <Text>{channel.name}</Text>
+            <ListItem 
+              key={channel.id} 
+              cursor='pointer' 
+              _hover={{ bgColor: 'gray.100' }}
+            >
+              <Text paddingX='4'># {channel.name}</Text>
             </ListItem>
           ))}
         </List>
