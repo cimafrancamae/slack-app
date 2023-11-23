@@ -2,64 +2,109 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { Flex } from '@chakra-ui/layout';
-import { fetchAllUsers, fetchUserChannels } from '../../services/api';
+import { fetchAllUsers, fetchUserChannels, headers, url } from '../../services/api';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
 import Dashboard from '../../components/Dashboard/Dashboard';
+import { getLastTenUsers } from '../../utils/helper';
+import useFetch from '../../utils/hooks/useFetch';
 
 function HomePage() {
     const uid = localStorage.getItem('uid').split('@')[0];
     const signedInUser = uid.charAt(0).toUpperCase().concat(uid.slice(1));
 
+    
+    const [users, setUsers] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const users = fetchAllUsers();
-    const channels = fetchUserChannels();
+    const { apiUrl: userUrl, options: userOptions } = fetchAllUsers();
+    const { apiUrl: channelUrl, options: channelOptions } = fetchUserChannels();
 
+    const { data: userData, error: userError, load: userLoading } = useFetch(userUrl, userOptions);
+    const { data: channelData, error: channelError, load: channelLoading } = useFetch(channelUrl, channelOptions);
+
+    const [messageData, setMessageData] = useState(null);
+
+    let channelList = [
+        { id: 1, name: 'general' },
+        { id: 2, name: 'random' },
+      ];
+    
     const toast = useToast();
 
-    useEffect(()=> {
-        let toastTitle = '';
+    if (channelData && Array.isArray(channelData.data)) {
+        channelList = channelList.concat(channelData.data.map(channel => ({ id: channel.id, name: channel.name })));
+    }
 
-        if(channels.error || users.error){
-            if(channels.error) {
-                console.error('Error:', channels.error.message);
-                toastTitle = 'Failed to load all channels';
-            }
+    useEffect(() => {
+        const fetchDataForLastTenUsers = async () => {
+            
+            const userIds = getLastTenUsers(users);
+
+            if(userIds){
+                const options = {
+                    method: 'GET',
+                    headers: headers
+                };
     
-            if(users.error){
-                console.error('Error:', users.error.message);
-                toastTitle = 'Failed to load all users';
+               const requests = await userIds.map(id =>
+                    fetch(`${url}/messages?receiver_id=${id}&receiver_class=User`, options)
+                       .then((response) => {
+                           if(!response.ok){
+                               throw new Error('Network response was not ok');
+                           }
+                           return response.json();
+                       })
+                       .catch((error) => {
+                           console.error('Error fetching messages', id, error);
+                           return { error };
+                       })
+                );
+
+                try {
+                    const messagesData = await Promise.all(requests);
+                    console.log('messages', messagesData)
+                    setMessageData(messagesData);
+                } catch (error) {
+                    console.log('Error fetching messages', error);
+                }
             }
+        }
+
+        fetchDataForLastTenUsers();
+
+    }, [users]);
+
+    useEffect(() => {
+        if (userError || channelError) {
+          console.error('Error:', userError || channelError);
+          toast({
+            title: 'Failed to load data',
+            status: 'error',
+            position: 'top',
+            duration: 5000,
+            isClosable: true
+          });
+        }
     
-            toast({
-                title: toastTitle,
-                status: 'error',
-                position: 'top',
-                duration: 5000,
-                isClosable: true
-            });
+        if (userData) {
+          setLoading(userLoading);
+          setUsers(userData);
+          localStorage.setItem('users', JSON.stringify(userData));
         }
-
-        if (users.data) {
-            setLoading(users.load);
-            localStorage.setItem('users',JSON.stringify(users.data));
+    
+        if (channelData) {
+          setLoading(channelLoading);
+          localStorage.setItem('channels', JSON.stringify(channelData));
         }
-
-        if (channels.data) {
-            setLoading(channels.load);
-            localStorage.setItem('channels',JSON.stringify(channels.data));
-        }
-
-        console.log(users, channels)
-    }, [users, channels]);
+    }, [userData, userError, channelData, channelError]);
 
     return (
         <div className='home-container'>
             {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
             <Header signedInUser={signedInUser} />
             <Flex>
-                <Sidebar channels={channels} />
+                <Sidebar channels={channelList} />
                 <Dashboard />
             </Flex>
         </div>
