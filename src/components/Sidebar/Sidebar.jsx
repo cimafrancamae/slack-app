@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react';
 import ChannelList from './Channel/ChannelList';
 import DirectMessageList from './DirectMessage/DirectMessageList';
 
-const Sidebar = ({ channels, msgReceivers }) => {
+const Sidebar = ({ channels, retrieveMessages, messageReceiver }) => {
 
   return (
     <div className="sidebar-container">
@@ -16,8 +16,8 @@ const Sidebar = ({ channels, msgReceivers }) => {
         boxShadow="md"
         overflowY="auto"
       >
-        <ChannelList channels={channels} />
-        <DirectMessageList receivers={msgReceivers} />
+        <ChannelList channels={channels} retrieveMessages={retrieveMessages} />
+        <DirectMessageList receivers={messageReceiver} />
       </Box>
     </div>
   );

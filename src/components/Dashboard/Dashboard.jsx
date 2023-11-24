@@ -8,7 +8,7 @@ import { sendMessage } from '../../services/api';
 import { Toast } from '@chakra-ui/react';
 
 
-function Dashboard({ signedInUser }) {
+function Dashboard({ signedInUser, messageReceiver }) {
     const users = JSON.parse(localStorage.getItem('users'));
     const messages = JSON.parse(localStorage.getItem('messages'));
 
@@ -58,13 +58,16 @@ function Dashboard({ signedInUser }) {
                 boxShadow="md"
             >
                 <Box>
-                    <MessageHeader users={users} />
+                    <MessageHeader users={users} receiver={messageReceiver} />
                 </Box>
                 <Box flex="1">
                     <MessageList />
                 </Box>
                 <Box mt="3">
-                    <MessageInput onSendMessage={onSendMessage} />
+                    <MessageInput 
+                        receiver={messageReceiver} 
+                        onSendMessage={onSendMessage} 
+                    />
                 </Box>
             </Box>
         </>

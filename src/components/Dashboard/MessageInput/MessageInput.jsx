@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Input, Button } from '@chakra-ui/react';
 import { MdSend } from 'react-icons/md';
 
-const MessageInput = ({ onSendMessage }) => {
+const MessageInput = ({ receiver, onSendMessage }) => {
   const [message, setMessage] = useState('');
 
   const handleInputChange = (event) => {

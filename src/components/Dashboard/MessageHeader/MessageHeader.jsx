@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import SelectUser from './components/SelectUser';
+import { capitalize } from '../../../utils/helper';
 
-function MessageHeader({ users }) {
+function MessageHeader({ users, receiver = {} }) {
     
-    // const channel = localStorage.getItem('channel') || null;
-    const messages = localStorage.getItem('messages') || [];
+    const { name: receiverName, class: receiverClass } = receiver;
 
-    const title = messages ? messages : 'New Message';
+    const title = receiver ? capitalize(receiverName) : 'New Message';
 
     const [selectedUser, setSelectedUser] = useState(null);
 
@@ -39,7 +39,9 @@ function MessageHeader({ users }) {
                     {title}
                 </Text>
             </Box>
-            <SelectUser users={users} onSelectUser={onSelectUser} />
+            {receiverClass !== 'Channel' && (
+                <SelectUser users={users} onSelectUser={onSelectUser} />
+            )}
         </>
     );
 }
