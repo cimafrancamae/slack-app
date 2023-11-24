@@ -1,4 +1,5 @@
 import useFetch from "../utils/hooks/useFetch";
+import { getLastTenUsers } from "../utils/helper";
 
 export const url = 'http://206.189.91.54/api/v1';
 export const headers = {
@@ -96,11 +97,12 @@ export const fetchUserChannels = () => {
 }
 
 export const fetchMessage = (receiverId, receiverClass) => {
+
     options = {
         method: 'GET',
         headers: headers
     };
-
+    
     apiUrl = `${url}/messages?receiver_id=${receiverId}&receiver_class=${receiverClass}`;
 
     return { apiUrl, options };
@@ -151,4 +153,37 @@ export const addChannelMember = (requestBody) => {
     apiUrl = `${url}/channel/add_member`;
 
     return { apiUrl, options };
+}
+
+export const fetchDataForLastTenUsers = async (users) => {
+            
+    const userIds = getLastTenUsers(users);
+
+    if(userIds){
+        const options = {
+            method: 'GET',
+            headers: headers
+        };
+
+       const requests = await userIds.map(id =>
+            fetch(`${url}/messages?receiver_id=${id}&receiver_class=User`, options)
+               .then((response) => {
+                   if(!response.ok){
+                       throw new Error('Network response was not ok');
+                   }
+                   return response.json();
+               })
+               .catch((error) => {
+                   console.error('Error fetching messages', id, error);
+                   return { error };
+               })
+        );
+
+        try {
+            const messagesData = await Promise.all(requests);
+            return messagesData;
+        } catch (error) {
+            console.log('Error fetching messages', error);
+        }
+    }
 }
