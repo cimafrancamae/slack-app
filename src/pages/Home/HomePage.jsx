@@ -36,11 +36,7 @@ function HomePage() {
     
     const toast = useToast();
 
-    function retrieveMessages (messageData, messageError, messageLoading, receiver) {
-      console.log('data', messageData);
-      console.log('error', messageError);
-      console.log('load', messageLoading);
-      console.log('receiver', receiver);
+    const retrieveMessages = (receiver) => {
       setMessageReceiver(receiver);
     }
 
@@ -57,13 +53,13 @@ function HomePage() {
     useEffect(() => {
       if (userError) {
         console.error('User Error:', userError);
-        toast({
-          title: 'Failed to load users',
-          status: 'error',
-          position: 'top',
-          duration: 5000,
-          isClosable: true
-        });
+        // toast({
+        //   title: 'Failed to load users',
+        //   status: 'error',
+        //   position: 'top',
+        //   duration: 5000,
+        //   isClosable: true
+        // });
       }
       if (userData) {
         setLoading(userLoading);
@@ -74,13 +70,13 @@ function HomePage() {
     useEffect(() => {
       if (channelError) {
         console.error('Channel Error:', channelError);
-        toast({
-          title: 'Failed to load channels',
-          status: 'error',
-          position: 'top',
-          duration: 5000,
-          isClosable: true
-        });
+        // toast({
+        //   title: 'Failed to load channels',
+        //   status: 'error',
+        //   position: 'top',
+        //   duration: 5000,
+        //   isClosable: true
+        // });
       }
       if (channelData) {
         setLoading(channelLoading);
@@ -98,7 +94,7 @@ function HomePage() {
                   retrieveMessages={retrieveMessages} 
                   messageReceiver={messageReceiver} 
                 />
-                <MessageContainer messageReceiver={messageReceiver} />
+                <MessageContainer messageReceiver={messageReceiver} users={userData} />
             </Flex>
         </div>
     );

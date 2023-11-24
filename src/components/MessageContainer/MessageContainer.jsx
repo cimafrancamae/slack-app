@@ -5,51 +5,47 @@ import MessageInput from './MessageInput/MessageInput';
 import MessageHeader from './MessageHeader/MessageHeader';
 import useFetch from '../../utils/hooks/useFetch';
 import { fetchMessage, sendMessage } from '../../services/api';
-import { Toast } from '@chakra-ui/react';
+import { Toast, useToast } from '@chakra-ui/react';
 import MessageDisplay from './MessageDisplay/MessageDisplay';
 
 
-function MessageContainer({ messageReceiver }) {
-    const users = JSON.parse(localStorage.getItem('users'));
-    const messages = JSON.parse(localStorage.getItem('messages'));
+function MessageContainer({ users, messageReceiver = {} }) {
 
-    const [message, setMessage] = useState('');
-    const [requestBody, setRequestBody] = useState({});
+    const [messages, setMessages] = useState([])
 
-    const { apiUrl: sendMessageUrl, options: sendMessageOptions } = sendMessage(requestBody);
-    // const { apiUrl, options } = fetchMessage(messageReceiver.id, messageReceiver.class);
+    const { data, error, load, fetchData } = useFetch();
 
-    const { data: sendMessageData, error: sendMessageError, load: sendMessageLoad, fetchData: fetchSendMessage } = useFetch(sendMessageUrl, sendMessageOptions);
+    const toast = useToast();
 
-    const onSendMessage = (message) => {
-        console.log(message)
-        setMessage(message);
+    useEffect(() => {
+      handleSendMessage();
+    }, [messageReceiver]);
+
+    useEffect(() => {
+      if(error){
+        console.log('error', error);
+        setMessages([]);
+        // toast({
+        //   title: 'Failed to retrieve messages',
+        //   status: 'error',
+        //   position: 'top',
+        //   duration: 5000,
+        //   isClosable: true
+        // })
+      }
+
+      if(data){
+        console.log('data', data.data);
+        setMessages(data.data.map(message => message));
+      }
+    }, [data, error, load, toast])
+
+    const handleSendMessage = () => {
+        if(messageReceiver){
+          const { apiUrl, options } = fetchMessage(messageReceiver.id, messageReceiver.class);
+          fetchData(apiUrl, options);
+        }
     }
-
-    useEffect(() => {
-        if(messages){
-            const body = {
-                "receiver_id": messages.receiver.id,
-                "receiver_class": messages.receiver_class,
-                "body": message,
-            }
-
-            setRequestBody(body);
-        }
-    },[requestBody]);
-
-    useEffect(() => {
-        if(sendMessageError){
-            console.error('Error', sendMessageError.message);
-            Toast({
-                title: 'Failed to send message',
-                status: 'error',
-                position: 'top',
-                duration: 5000,
-                isClosable: true
-            });
-        }
-    }, [sendMessageError])
 
     return (
         <>
@@ -65,12 +61,12 @@ function MessageContainer({ messageReceiver }) {
                     <MessageHeader users={users} receiver={messageReceiver} />
                 </Box>
                 <Box flex="1"  overflowY="auto" alignItems="flex-end">
-                    <MessageDisplay receiver={messageReceiver} onSendMessage={onSendMessage} />
+                    <MessageDisplay messages={messages} />
                 </Box>
                 <Box mt="3">
                     <MessageInput 
                         receiver={messageReceiver} 
-                        onSendMessage={onSendMessage} 
+                        onSendMessage={handleSendMessage} 
                     />
                 </Box>
             </Box>

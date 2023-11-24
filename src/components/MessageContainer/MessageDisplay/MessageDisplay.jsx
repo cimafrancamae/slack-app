@@ -5,40 +5,8 @@ import { fetchMessage } from '../../../services/api';
 import useFetch from '../../../utils/hooks/useFetch';
 import { capitalize } from '../../../utils/helper';
 
-const MessageDisplay = ({ receiver = {}, onSendMessage }) => {
+const MessageDisplay = ({ messages }) => {
     
-    const [messages, setMessages] = useState([])
-
-    const { data, error, load, fetchData } = useFetch();
-
-    const toast = useToast();
-
-    useEffect(() => {
-      if(receiver){
-        const { apiUrl, options } = fetchMessage(receiver.id, receiver.class);
-        fetchData(apiUrl, options);
-      }
-    }, [receiver]);
-
-    useEffect(() => {
-      if(error){
-        console.log('error', error);
-        setMessages([]);
-        toast({
-          title: 'Failed to retrieve messages',
-          status: 'error',
-          position: 'top',
-          duration: 5000,
-          isClosable: true
-        })
-      }
-
-      if(data){
-        console.log('data', data.data);
-        setMessages(data.data.map(message => message));
-      }
-    }, [data, error, load, toast])
-
   return (
     <>
       <MessageDisplayHeader />
