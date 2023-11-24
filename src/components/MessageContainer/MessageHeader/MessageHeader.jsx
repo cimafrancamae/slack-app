@@ -4,10 +4,8 @@ import SelectUser from './components/SelectUser';
 import { capitalize } from '../../../utils/helper';
 
 function MessageHeader({ users, receiver = {} }) {
-    
-    const { name: receiverName, class: receiverClass } = receiver;
 
-    const title = receiver ? capitalize(receiverName) : 'New Message';
+    const title = receiver ? capitalize(receiver.name) : 'New Message';
 
     const [selectedUser, setSelectedUser] = useState(null);
 
@@ -20,8 +18,8 @@ function MessageHeader({ users, receiver = {} }) {
         if(selectedUser){
             const receiver = selectedUser;
             const receiver_class = "User";
-            messages.push({ receiver, receiver_class });
-            localStorage.setItem('messages', JSON.stringify(messages));
+            // messages.push({ receiver, receiver_class });
+            // localStorage.setItem('messages', JSON.stringify(messages));
         }
     },[selectedUser])
  
@@ -39,7 +37,7 @@ function MessageHeader({ users, receiver = {} }) {
                     {title}
                 </Text>
             </Box>
-            {receiverClass !== 'Channel' && (
+            {(receiver && receiver.class !== 'Channel' || title === 'New Message') && (
                 <SelectUser users={users} onSelectUser={onSelectUser} />
             )}
         </>

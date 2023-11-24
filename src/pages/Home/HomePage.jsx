@@ -5,10 +5,11 @@ import { Flex } from '@chakra-ui/layout';
 import { fetchAllUsers, fetchMessage, fetchUserChannels, headers, url } from '../../services/api';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
-import Dashboard from '../../components/Dashboard/Dashboard';
+import Dashboard from '../../components/MessageContainer/MessageContainer';
 import { capitalize, getLastTenUsers } from '../../utils/helper';
 import useFetch from '../../utils/hooks/useFetch';
 import { fetchDataForLastTenUsers } from '../../services/api';
+import MessageContainer from '../../components/MessageContainer/MessageContainer';
 
 function HomePage() {
     const uid = localStorage.getItem('uid').split('@')[0];
@@ -91,13 +92,13 @@ function HomePage() {
         <div className='home-container'>
             {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
             <Header signedInUser={signedInUser} />
-            <Flex>
+            <Flex  maxH='50%'>
                 <Sidebar 
                   channels={channelList} 
                   retrieveMessages={retrieveMessages} 
                   messageReceiver={messageReceiver} 
                 />
-                <Dashboard messageReceiver={messageReceiver} />
+                <MessageContainer messageReceiver={messageReceiver} />
             </Flex>
         </div>
     );

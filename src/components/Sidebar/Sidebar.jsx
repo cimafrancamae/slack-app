@@ -8,7 +8,8 @@ const Sidebar = ({ channels, retrieveMessages, messageReceiver }) => {
     <div className="sidebar-container">
       <Box
         w="250px"
-        minHeight="calc(100vh - 100px)"
+        minHeight="84vh"
+        maxHeight="100%"
         bg="gray.200"
         p="4"
         borderRight="1px solid"

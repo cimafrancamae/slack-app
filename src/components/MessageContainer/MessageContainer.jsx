@@ -4,19 +4,22 @@ import MessageList from './MessageDisplay/MessageDisplay';
 import MessageInput from './MessageInput/MessageInput';
 import MessageHeader from './MessageHeader/MessageHeader';
 import useFetch from '../../utils/hooks/useFetch';
-import { sendMessage } from '../../services/api';
+import { fetchMessage, sendMessage } from '../../services/api';
 import { Toast } from '@chakra-ui/react';
+import MessageDisplay from './MessageDisplay/MessageDisplay';
 
 
-function Dashboard({ signedInUser, messageReceiver }) {
+function MessageContainer({ messageReceiver }) {
     const users = JSON.parse(localStorage.getItem('users'));
     const messages = JSON.parse(localStorage.getItem('messages'));
 
     const [message, setMessage] = useState('');
     const [requestBody, setRequestBody] = useState({});
 
-    const { apiUrl, options } = sendMessage(requestBody);
-    const { data, error, load } = useFetch(apiUrl, options);
+    const { apiUrl: sendMessageUrl, options: sendMessageOptions } = sendMessage(requestBody);
+    // const { apiUrl, options } = fetchMessage(messageReceiver.id, messageReceiver.class);
+
+    const { data: sendMessageData, error: sendMessageError, load: sendMessageLoad, fetchData: fetchSendMessage } = useFetch(sendMessageUrl, sendMessageOptions);
 
     const onSendMessage = (message) => {
         console.log(message)
@@ -36,8 +39,8 @@ function Dashboard({ signedInUser, messageReceiver }) {
     },[requestBody]);
 
     useEffect(() => {
-        if(error){
-            console.error('Error', error.message);
+        if(sendMessageError){
+            console.error('Error', sendMessageError.message);
             Toast({
                 title: 'Failed to send message',
                 status: 'error',
@@ -46,7 +49,7 @@ function Dashboard({ signedInUser, messageReceiver }) {
                 isClosable: true
             });
         }
-    }, [error])
+    }, [sendMessageError])
 
     return (
         <>
@@ -56,12 +59,13 @@ function Dashboard({ signedInUser, messageReceiver }) {
                 flexDirection="column"
                 bg="gray.50"
                 boxShadow="md"
+                maxH='84vh'
             >
                 <Box>
                     <MessageHeader users={users} receiver={messageReceiver} />
                 </Box>
-                <Box flex="1">
-                    <MessageList />
+                <Box flex="1"  overflowY="auto" alignItems="flex-end">
+                    <MessageDisplay receiver={messageReceiver} onSendMessage={onSendMessage} />
                 </Box>
                 <Box mt="3">
                     <MessageInput 
@@ -74,4 +78,4 @@ function Dashboard({ signedInUser, messageReceiver }) {
     );
 }
 
-export default Dashboard;
+export default MessageContainer;
