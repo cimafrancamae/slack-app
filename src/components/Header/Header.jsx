@@ -42,6 +42,7 @@ const Header = ({ signedInUser }) => {
           <PopoverTrigger>
             <Avatar 
               size="xs" 
+              borderRadius="5"
               name={signedInUser} 
               cursor="pointer" 
               onClick={handlePopOver}

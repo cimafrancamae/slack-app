@@ -1,6 +1,20 @@
 import { extendTheme } from '@chakra-ui/react';
 
 const theme = extendTheme({
+  styles: {
+    global: {
+      '::-webkit-scrollbar': {
+        width: '8px',
+      },
+      '::-webkit-scrollbar-thumb': {
+        bg: 'gray.300',
+        borderRadius: 'lg',
+      },
+      '::-webkit-scrollbar-track': {
+        bg: 'gray.100',
+      },
+    },
+  },
   fonts: {
     body: 'Roboto, sans-serif',
     heading: 'Poppins, sans-serif',
@@ -9,7 +23,6 @@ const theme = extendTheme({
     primary: '#6C63FF',
     secondary: '#FF6347',
     accent: '#FFA500',
-    // Add more colors as needed
   },
   breakpoints: {
     sm: '30em', // 480px
@@ -17,7 +30,6 @@ const theme = extendTheme({
     lg: '62em', // 992px
     xl: '80em', // 1280px
   },
-  // Add other theme configurations such as shadows, borders, etc.
 });
 
 export default theme;

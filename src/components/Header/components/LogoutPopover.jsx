@@ -23,6 +23,10 @@ function LogoutPopover({ signedInUser, handlePopOver }) {
     const handleDarkMode = () => {
 
     }
+
+    const handleProfile = () => {
+
+    }
     
     return (
         <>
@@ -43,6 +47,15 @@ function LogoutPopover({ signedInUser, handlePopOver }) {
                     justifyContent="center"
                     alignItems="flex-start"
                 >
+                    <MenuButton 
+                        as={Button} 
+                        variant="ghost" 
+                        w="100%" 
+                        textAlign="left" 
+                        onClick={handleProfile}
+                    >
+                        Profile
+                    </MenuButton>
                     <MenuButton 
                         as={Button} 
                         variant="ghost" 

@@ -30,8 +30,8 @@ function Channel({ channels, retrieveMessages }) {
   }, [apiUrl, options]);
 
   useEffect(() => {
-    retrieveMessages(data, error, load, receiver);
-  }, [data, error, load, receiver])
+    retrieveMessages(receiver);
+  }, [receiver])
 
   return (
       <List spacing={3}>

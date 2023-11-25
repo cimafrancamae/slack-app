@@ -3,7 +3,7 @@ import { getLastTenUsers } from "../utils/helper";
 
 export const url = 'http://206.189.91.54/api/v1';
 export const headers = {
-    'content-type': 'application/json',
+    'Content-Type': 'application/json',
     'access-token': localStorage.getItem('access-token'),
     client: localStorage.getItem('client'),
     expiry: localStorage.getItem('expiry'),

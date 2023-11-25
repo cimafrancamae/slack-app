@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { Flex } from '@chakra-ui/layout';
-import { fetchAllUsers, fetchMessage, fetchUserChannels, headers, url } from '../../services/api';
+import { fetchAllUsers, fetchChannel, fetchMessage, fetchUserChannels } from '../../services/api';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
-import Dashboard from '../../components/MessageContainer/MessageContainer';
 import { capitalize, getLastTenUsers } from '../../utils/helper';
 import useFetch from '../../utils/hooks/useFetch';
 import { fetchDataForLastTenUsers } from '../../services/api';
@@ -17,12 +16,14 @@ function HomePage() {
 
     const [loading, setLoading] = useState(false);
     const [messageReceiver, setMessageReceiver] = useState(null);
+    const [channel, setChannel] = useState(null);
 
     const { apiUrl: userUrl, options: userOptions } = fetchAllUsers();
-    const { apiUrl: channelUrl, options: channelOptions } = fetchUserChannels();
+    const { apiUrl: userChannelUrl, options: userChannelOptions } = fetchUserChannels();
 
     const { data: userData, error: userError, load: userLoading, fetchData: fetchUsers } = useFetch();
-    const { data: channelData, error: channelError, load: channelLoading, fetchData: fetchChannels } = useFetch();
+    const { data: userChannelData, error: userChannelError, load: userChannelLoading, fetchData: fetchChannels } = useFetch();
+    const { data: channelData, error: channelError, load: channelLoading, fetchData: fetchChannelDetail } = useFetch();
 
 
     let channelList = [
@@ -30,24 +31,45 @@ function HomePage() {
       { id: 2, name: 'random' },
     ];
 
-    if (channelData && Array.isArray(channelData.data)) {
-      channelList = channelList.concat(channelData.data.map(channel => ({ id: channel.id, name: channel.name })));
+    if (userChannelData && Array.isArray(userChannelData.data)) {
+      channelList = channelList.concat(userChannelData.data.map(channel => ({ id: channel.id, name: channel.name })));
     }
     
     const toast = useToast();
 
-    function retrieveMessages (messageData, messageError, messageLoading, receiver) {
-      console.log('data', messageData);
-      console.log('error', messageError);
-      console.log('load', messageLoading);
-      console.log('receiver', receiver);
-      setMessageReceiver(receiver);
+    const refreshChannel = (id) => {
+      const { apiUrl, options } = fetchChannel(id);
+      fetchChannelDetail(apiUrl, options);
+    }
+
+    const retrieveMessages = (receiver) => {
+      if(receiver){
+        if(receiver.class === 'Channel'){
+          refreshChannel(receiver.id)
+        }
+        setMessageReceiver(receiver);
+      }
     }
 
     useEffect(() => {
+      if(channelError){
+        console.error('Error fetching channel detail', channelError)
+      }
+
+      if(channelData){
+        setChannel(channelData.data);
+        setLoading(channelLoading)
+      }
+
+      if(channelLoading){
+        setLoading(channelLoading);
+      }
+    }, [channelData, channelError, channelLoading])
+
+    useEffect(() => {
       fetchUsers(userUrl, userOptions);
-      fetchChannels(channelUrl, channelOptions);
-    }, [userUrl, channelUrl])
+      fetchChannels(userChannelUrl, userChannelOptions);
+    }, [userUrl, userChannelUrl])
 
     // useEffect(() => {
     //     const lastTenUsersData = fetchDataForLastTenUsers(userData);
@@ -72,8 +94,8 @@ function HomePage() {
     }, [userData, userError, userLoading, toast])
 
     useEffect(() => {
-      if (channelError) {
-        console.error('Channel Error:', channelError);
+      if (userChannelError) {
+        console.error('Channel Error:', userChannelError);
         toast({
           title: 'Failed to load channels',
           status: 'error',
@@ -82,11 +104,11 @@ function HomePage() {
           isClosable: true
         });
       }
-      if (channelData) {
-        setLoading(channelLoading);
-        localStorage.setItem('channels', JSON.stringify(channelData));
+      if (userChannelData) {
+        setLoading(userChannelLoading);
+        localStorage.setItem('channels', JSON.stringify(userChannelData));
       }
-    }, [channelData, channelError, channelLoading, toast])
+    }, [userChannelData, userChannelError, userChannelLoading, toast])
 
     return (
         <div className='home-container'>
@@ -98,7 +120,12 @@ function HomePage() {
                   retrieveMessages={retrieveMessages} 
                   messageReceiver={messageReceiver} 
                 />
-                <MessageContainer messageReceiver={messageReceiver} />
+                <MessageContainer 
+                  messageReceiver={messageReceiver} 
+                  users={userData}
+                  channelDetail={channel}
+                  refreshChannel={refreshChannel}
+                />
             </Flex>
         </div>
     );

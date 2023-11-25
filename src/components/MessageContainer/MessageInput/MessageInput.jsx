@@ -24,7 +24,6 @@ const MessageInput = ({ receiver = {}, onSendMessage }) => {
   
   const handleSubmit = () => {
     if (message.trim() !== '') {
-
       const requestBody = {
         receiver_id: receiver.id,
         receiver_class: receiver.class,
@@ -42,18 +41,17 @@ const MessageInput = ({ receiver = {}, onSendMessage }) => {
 
   useEffect(() => {
     if(error){
-      toast({
-        title: 'Failed to send message',
-        status: 'error',
-        position: 'top',
-        duration: 5000,
-        isClosable: true
-      });
+      // toast({
+      //   title: 'Failed to send message',
+      //   status: 'error',
+      //   position: 'top',
+      //   duration: 5000,
+      //   isClosable: true
+      // });
     } 
 
     if(data){
-      console.log('data', data.data.body)
-      onSendMessage(data.data.body);
+      onSendMessage();
       setMessage('');
     }
 
