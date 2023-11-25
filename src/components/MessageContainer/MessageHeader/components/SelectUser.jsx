@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Box, Text, Input, List, ListItem, Avatar, InputGroup, InputLeftAddon } from '@chakra-ui/react';
 import { flattenArray } from '../../../../utils/helper';
 
-function SelectUser({ users, onSelectUser }) {
+function SelectUser({ users, onUserSelect }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
 
@@ -26,7 +26,7 @@ function SelectUser({ users, onSelectUser }) {
         const userName = user.email.split('@')[0]
         setSelectedUser(user.id);
         setSearchQuery(userName);
-        onSelectUser(user);
+        onUserSelect(user);
       }
 
     return (
@@ -69,7 +69,7 @@ function SelectUser({ users, onSelectUser }) {
                                 gap="10px"
                                 paddingY="2"
                             >
-                                <Avatar name={user.name} size="xs" />
+                                <Avatar name={user.name} size="xs" borderRadius="5" />
                                 <Text fontSize="sm">{user.name}</Text>
                             </ListItem>
                             )) : <Text fontSize="xs">No users found</Text>}

@@ -9,7 +9,7 @@ import { Toast, useToast } from '@chakra-ui/react';
 import MessageDisplay from './MessageDisplay/MessageDisplay';
 
 
-function MessageContainer({ users, messageReceiver = {} }) {
+function MessageContainer({ users, messageReceiver = {}, channelDetail, refreshChannel }) {
 
     const [messages, setMessages] = useState([])
 
@@ -25,17 +25,16 @@ function MessageContainer({ users, messageReceiver = {} }) {
       if(error){
         console.log('error', error);
         setMessages([]);
-        // toast({
-        //   title: 'Failed to retrieve messages',
-        //   status: 'error',
-        //   position: 'top',
-        //   duration: 5000,
-        //   isClosable: true
-        // })
+        toast({
+          title: 'Failed to retrieve messages',
+          status: 'error',
+          position: 'top',
+          duration: 5000,
+          isClosable: true
+        })
       }
 
       if(data){
-        console.log('data', data.data);
         setMessages(data.data.map(message => message));
       }
     }, [data, error, load, toast])
@@ -58,7 +57,12 @@ function MessageContainer({ users, messageReceiver = {} }) {
                 maxH='84vh'
             >
                 <Box>
-                    <MessageHeader users={users} receiver={messageReceiver} />
+                    <MessageHeader 
+                      users={users} 
+                      receiver={messageReceiver} 
+                      channelDetail={channelDetail}
+                      refreshChannel={refreshChannel}
+                    />
                 </Box>
                 <Box flex="1"  overflowY="auto" alignItems="flex-end">
                     <MessageDisplay messages={messages} />

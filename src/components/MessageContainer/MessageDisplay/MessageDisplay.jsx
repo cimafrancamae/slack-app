@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, Box, Flex, Text, useToast } from '@chakra-ui/react';
 import MessageDisplayHeader from './components/MessageDisplayHeader';
 import { fetchMessage } from '../../../services/api';
@@ -6,6 +6,13 @@ import useFetch from '../../../utils/hooks/useFetch';
 import { capitalize } from '../../../utils/helper';
 
 const MessageDisplay = ({ messages }) => {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if(containerRef.current){
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [messages])
     
   return (
     <>
@@ -16,6 +23,7 @@ const MessageDisplay = ({ messages }) => {
           maxH="100%"
           minH="100%"
           overflowY="auto"
+          ref={containerRef}
       >
         {messages.map((message, index) => (
           <Box 
