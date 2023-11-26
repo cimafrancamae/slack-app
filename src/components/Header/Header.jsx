@@ -1,5 +1,5 @@
-import { Flex, Input, Avatar, AvatarBadge, IconButton, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react';
-import { BellIcon } from '@chakra-ui/icons';
+import { Flex, Input, Avatar, AvatarBadge, IconButton, Popover, PopoverTrigger, PopoverContent, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import { BellIcon, SearchIcon } from '@chakra-ui/icons';
 import logo from '../../../public/slack-logo.png'
 import LogoutPopover from './components/LogoutPopover';
 import { useState } from 'react';
@@ -23,13 +23,15 @@ const Header = ({ signedInUser }) => {
       <div>
         <img src={logo} className='header-logo' title='logo' />
       </div>
-
-      <Input 
-        placeholder="Search..." 
-        maxW="lg" 
-        mr="4" 
-        size="xs" 
-      />
+      <InputGroup size="xs" maxW="md" mr={4}>
+        <InputLeftElement>
+          <SearchIcon color="gray.500"  />
+        </InputLeftElement>
+        <Input 
+          type="search"
+          placeholder="Search..." 
+        />
+      </InputGroup>
 
       <Flex align="center">
         <IconButton 
