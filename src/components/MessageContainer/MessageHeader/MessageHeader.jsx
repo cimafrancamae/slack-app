@@ -58,7 +58,6 @@ function MessageHeader({ users, receiver = {}, channelDetail, refreshChannel }) 
         <>
             <Box 
                 bg="gray.200" 
-                boxShadow="md"
                 paddingX="4"
                 paddingY="2"
                 borderBottom="1px solid"
@@ -71,7 +70,7 @@ function MessageHeader({ users, receiver = {}, channelDetail, refreshChannel }) 
                     {isChannel && (
                         <>
                             <Tooltip hasArrow label='View or Add Members' bg='gray.700' color='white' placement='auto'>
-                                <AvatarGroup cursor="pointer" onClick={onMembersClick}>
+                                <AvatarGroup cursor="pointer" onClick={onMembersClick} size='sm' gap={2} max={3}>
                                     {channelMembers.map((member, index) => (
                                         <Avatar key={index} name={member.name} size='xs' borderRadius="5" />
                                     ))}

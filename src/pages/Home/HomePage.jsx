@@ -112,7 +112,9 @@ function HomePage() {
 
     return (
         <div className='home-container'>
+          <div className="progress-container">
             {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
+          </div>
             <Header signedInUser={signedInUser} />
             <Flex  maxH='50%'>
                 <Sidebar 

@@ -32,7 +32,7 @@ function SelectUser({ users, onUserSelect }) {
     return (
         <Box 
                 bg="gray.200" 
-                boxShadow="md"
+                boxShadow="xs"
                 paddingX="4"
                 paddingY="2"
                 borderBottom="1px solid"

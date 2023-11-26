@@ -56,7 +56,7 @@ const ChannelMembersModal = ({ channel, members, isOpen, onClose, users, onUserS
               _hover={{ borderColor: "gray.500" }}
             />
           </InputGroup>
-          <List>
+          <List h='100%' overflowY='auto'>
               <ListItem
                 key="add_member"
                 cursor="pointer" 

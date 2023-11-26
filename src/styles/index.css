@@ -93,4 +93,7 @@ body {
   width: 90vw;
   max-width: 90vw;
   max-height: 90vh;
+}
+.home-container .progress-container {
+  height: 5px;
 }/*# sourceMappingURL=index.css.map */

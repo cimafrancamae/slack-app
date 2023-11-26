@@ -36,7 +36,7 @@ function LogoutPopover({ signedInUser, handlePopOver }) {
                     alignItems="center"
                     paddingY="2"
                 >
-                    <Avatar name={signedInUser} size="sm" />
+                    <Avatar name={signedInUser} size="sm" borderRadius={5} />
                     <Text fontSize="md" fontWeight="bold">{signedInUser}</Text>
                 </Flex>
             </PopoverHeader>
