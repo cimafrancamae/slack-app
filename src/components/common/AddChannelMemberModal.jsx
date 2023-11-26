@@ -67,7 +67,8 @@ const AddChannelMemberModal = ({ users, channel, members, isOpen, onClose, refre
 
             const { apiUrl, options } = addChannelMember(requestBody);
             fetchData(apiUrl, options);
-        })
+        });
+        console.log(channel.id)
         refreshChannel(channel.id);
     }
 
@@ -118,10 +119,17 @@ const AddChannelMemberModal = ({ users, channel, members, isOpen, onClose, refre
                 </InputGroup>
                 <Flex flexWrap="wrap">
                     {selectedUsers.map((user) => (
-                    <Tag key={user.id} borderRadius="5" variant="solid" colorScheme="yellow" mr={2} mb={2}>
-                        <TagLabel>{ user.name }</TagLabel>
-                        <TagCloseButton onClick={() => handleRemoveUser(user)} />
-                    </Tag>
+                        <Tag 
+                            key={user.id} 
+                            borderRadius="5" 
+                            variant="solid" 
+                            colorScheme="yellow" 
+                            mr={2} 
+                            mb={2}
+                        >
+                            <TagLabel>{ user.name }</TagLabel>
+                            <TagCloseButton onClick={() => handleRemoveUser(user)} />
+                        </Tag>
                     ))}
                 </Flex>
                 <Box 
