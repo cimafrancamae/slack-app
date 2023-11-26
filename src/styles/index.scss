@@ -3,6 +3,7 @@
 
 @use "../components/Header/header";
 @use "../components/Sidebar/sidebar";
+@use "../components/MessageContainer/messageContainer";
 
 @use "../pages/Login/loginpage";
 @use "../pages/Signup/signuppage";

@@ -19,7 +19,7 @@ const MessageDisplay = ({ messages }) => {
     <>
       <MessageDisplayHeader />
       <Box 
-          bgImage={`linear-gradient(rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0.5)), url(${chatBg})`}
+          bgImage={chatBg}
           bgSize='cover'
           p="3" 
           maxH="100%"
@@ -31,12 +31,21 @@ const MessageDisplay = ({ messages }) => {
           <Box 
               key={index} 
               p="3" 
-              _hover={{ bgColor: 'gray.100' }}
+              // _hover={{ bgColor: 'gray.50' }}
           >
-            <Flex gap='2' alignItems='flex-start'>
-              <Avatar name={message.sender.email.split('@')[0]} size='sm' borderRadius='5' />
-              <div>
-                <Text fontWeight='bold' fontSize='sm'>{capitalize(message.sender.email.split('@')[0])}</Text>
+            <Flex gap='2' alignItems='flex-start' zIndex={1}>
+              <Avatar 
+                name={message.sender.email.split('@')[0]} 
+                size='sm' 
+                borderRadius='5' 
+              />
+              <div className='message-bubble'>
+                <Text 
+                  fontWeight='bold' 
+                  fontSize='sm'
+                >
+                  {capitalize(message.sender.email.split('@')[0])}
+                </Text>
                 <Text fontSize='sm'>{message.body}</Text>
               </div>
             </Flex>

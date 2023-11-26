@@ -3,14 +3,16 @@ import { List, ListItem, Flex, Icon, Text } from '@chakra-ui/react';
 import { MdAdd } from 'react-icons/md';
 import { fetchMessage, headers, url } from '../../../services/api';
 import useFetch from '../../../utils/hooks/useFetch';
+import CreateChannelModal from '../../common/CreateChannelModal';
 
-function Channel({ channels, retrieveMessages }) {
+function Channel({ channels, retrieveMessages, users }) {
 
   const receiverClass = 'Channel';
 
   const [apiUrl, setUrl] = useState(null);  
   const [options, setOptions] = useState({});
   const [receiver, setReceiver] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
   
   const { data, error, load, fetchData } = useFetch();
 
@@ -21,6 +23,15 @@ function Channel({ channels, retrieveMessages }) {
 
     const messageReceiver = { ...channel, class: receiverClass}
     setReceiver(messageReceiver)
+  }
+
+  const handleCreateChannel = () => {
+    console.log('click')
+    setIsOpen(true);
+  }
+
+  const onClose = () => {
+    setIsOpen(false);
   }
 
   useEffect(() => {
@@ -38,8 +49,17 @@ function Channel({ channels, retrieveMessages }) {
         <ListItem fontWeight="bold" fontSize="lg">
           <Flex align="center" justify="space-between">
             Channels
-            <Icon as={MdAdd} ml="2" cursor="pointer" color="blue.500" />
+            <Icon 
+              as={MdAdd} 
+              ml="2" 
+              cursor="pointer" 
+              color="blue.500" 
+              onClick={handleCreateChannel}
+            />
           </Flex>
+          {isOpen && (
+            <CreateChannelModal isOpen={isOpen} onClose={onClose} users={users} />
+          )}
         </ListItem>
         {channels.map((channel) => (
           <ListItem 

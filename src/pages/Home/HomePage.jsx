@@ -121,6 +121,7 @@ function HomePage() {
                   channels={channelList} 
                   retrieveMessages={retrieveMessages} 
                   messageReceiver={messageReceiver} 
+                  users={userData}
                 />
                 <MessageContainer 
                   messageReceiver={messageReceiver} 

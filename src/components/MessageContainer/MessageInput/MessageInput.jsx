@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Input, Button, useToast } from '@chakra-ui/react';
+import { Box, Input, Button, useToast, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { MdSend } from 'react-icons/md';
 import useFetch from '../../../utils/hooks/useFetch';
 import { sendMessage } from '../../../services/api';
@@ -58,17 +58,28 @@ const MessageInput = ({ receiver = {}, onSendMessage }) => {
   }, [data, error, load])
 
   return (
-    <Box p="3" borderTop="1px solid" borderColor="gray.300" display="flex">
-      <Input
-        placeholder="Type your message..."
-        value={message}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyPress}
-        flex="1"
-        marginRight="2"
-        h="4rem"
-      />
-      <Button
+    <Box 
+      // p="3" 
+      // borderTop="1px solid" 
+      // borderColor="gray.300" 
+      display="flex"
+    >
+      <InputGroup display="flex" alignItems="center" justifyContent="center">
+        <Input
+          placeholder="Type your message..."
+          value={message}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyPress}
+          flex="1"
+          // marginRight="2"
+          h="4rem"
+          borderColor="gray.300"
+        />
+        <InputRightElement color='gray.500' padding={1}>
+          <MdSend size={50}  />
+        </InputRightElement>
+      </InputGroup>
+      {/* <Button
         colorScheme="blue"
         aria-label="Send Message"
         onClick={handleSubmit}
@@ -79,7 +90,7 @@ const MessageInput = ({ receiver = {}, onSendMessage }) => {
         justifyContent="center"
       >
         <MdSend size={24} />
-      </Button>
+      </Button> */}
     </Box>
   );
 };

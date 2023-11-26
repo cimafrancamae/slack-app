@@ -67,12 +67,12 @@ function MessageContainer({ users, messageReceiver = {}, channelDetail, refreshC
                 <Box flex="1"  overflowY="auto" alignItems="flex-end">
                     <MessageDisplay messages={messages} />
                 </Box>
-                <Box mt="3">
                     <MessageInput 
                         receiver={messageReceiver} 
                         onSendMessage={handleSendMessage} 
                     />
-                </Box>
+                {/* <Box border="none">
+                </Box> */}
             </Box>
         </>
     );
