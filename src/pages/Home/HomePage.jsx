@@ -17,6 +17,7 @@ function HomePage() {
     const [loading, setLoading] = useState(false);
     const [messageReceiver, setMessageReceiver] = useState(null);
     const [channel, setChannel] = useState(null);
+    const [messages, setMessages] = useState([]);
 
     const { apiUrl: userUrl, options: userOptions } = fetchAllUsers();
     const { apiUrl: userChannelUrl, options: userChannelOptions } = fetchUserChannels();
@@ -24,6 +25,7 @@ function HomePage() {
     const { data: userData, error: userError, load: userLoading, fetchData: fetchUsers } = useFetch();
     const { data: userChannelData, error: userChannelError, load: userChannelLoading, fetchData: fetchChannels } = useFetch();
     const { data: channelData, error: channelError, load: channelLoading, fetchData: fetchChannelDetail } = useFetch();
+    const { data: messagesData, error: messagesError, load: messagesLoading, fetchData: fetchMessages } = useFetch();
 
 
     let channelList = [
@@ -42,13 +44,22 @@ function HomePage() {
       fetchChannelDetail(apiUrl, options);
     }
 
+    const handleSendMessage = () => {
+      if(messageReceiver){
+        const { apiUrl, options } = fetchMessage(messageReceiver.id, messageReceiver.class);
+        fetchMessages(apiUrl, options);
+      } else {
+        setMessages([]);
+      }
+  }
+
     const retrieveMessages = (receiver) => {
       if(receiver){
         if(receiver.class === 'Channel'){
           refreshChannel(receiver.id)
         }
-        setMessageReceiver(receiver);
-      }
+      } 
+      setMessageReceiver(receiver);
     }
 
     useEffect(() => {
@@ -110,6 +121,32 @@ function HomePage() {
       }
     }, [userChannelData, userChannelError, userChannelLoading, toast])
 
+    useEffect(() => {
+      if(messagesError){
+        console.log('error', messagesError);
+        setMessages([]);
+        toast({
+          title: 'Failed to retrieve messages',
+          status: 'error',
+          position: 'top',
+          duration: 5000,
+          isClosable: true
+        })
+      }
+
+      if(messagesData){
+        setMessages(messagesData.data.map(message => message));
+        setLoading(messagesLoading);
+      } else {
+        setMessages([]);
+      }
+
+      if(messagesLoading){
+        setLoading(messagesLoading);
+      }
+
+    }, [messagesData, messagesError, messagesLoading, toast])
+
     return (
         <div className='home-container'>
           <div className="progress-container">
@@ -119,15 +156,19 @@ function HomePage() {
             <Flex  maxH='50%'>
                 <Sidebar 
                   channels={channelList} 
+                  messages={messages}
                   retrieveMessages={retrieveMessages} 
                   messageReceiver={messageReceiver} 
                   users={userData}
                 />
                 <MessageContainer 
                   messageReceiver={messageReceiver} 
+                  messages={messages}
                   users={userData}
                   channelDetail={channel}
                   refreshChannel={refreshChannel}
+                  handleSendMessage={handleSendMessage}
+                  retrieveMessages={retrieveMessages}
                 />
             </Flex>
         </div>

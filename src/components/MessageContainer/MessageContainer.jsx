@@ -9,42 +9,12 @@ import { Toast, useToast } from '@chakra-ui/react';
 import MessageDisplay from './MessageDisplay/MessageDisplay';
 
 
-function MessageContainer({ users, messageReceiver = {}, channelDetail, refreshChannel }) {
-
-    const [messages, setMessages] = useState([])
-
-    const { data, error, load, fetchData } = useFetch();
-
-    const toast = useToast();
+function MessageContainer({ messages, users, messageReceiver = {}, channelDetail, refreshChannel, handleSendMessage, retrieveMessages }) {
 
     useEffect(() => {
+      retrieveMessages(messageReceiver);
       handleSendMessage();
     }, [messageReceiver]);
-
-    useEffect(() => {
-      if(error){
-        console.log('error', error);
-        setMessages([]);
-        toast({
-          title: 'Failed to retrieve messages',
-          status: 'error',
-          position: 'top',
-          duration: 5000,
-          isClosable: true
-        })
-      }
-
-      if(data){
-        setMessages(data.data.map(message => message));
-      }
-    }, [data, error, load, toast])
-
-    const handleSendMessage = () => {
-        if(messageReceiver){
-          const { apiUrl, options } = fetchMessage(messageReceiver.id, messageReceiver.class);
-          fetchData(apiUrl, options);
-        }
-    }
 
     return (
         <>
@@ -71,8 +41,6 @@ function MessageContainer({ users, messageReceiver = {}, channelDetail, refreshC
                         receiver={messageReceiver} 
                         onSendMessage={handleSendMessage} 
                     />
-                {/* <Box border="none">
-                </Box> */}
             </Box>
         </>
     );

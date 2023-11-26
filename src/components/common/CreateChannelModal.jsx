@@ -1,17 +1,19 @@
 import { SearchIcon } from '@chakra-ui/icons';
-import { Avatar, Box, Button, Flex, FormLabel, Input, InputGroup, InputLeftElement, List, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Tag, TagCloseButton, TagLabel, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Avatar, Box, Button, Flex, FormLabel, Input, InputGroup, InputLeftElement, List, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Tag, TagCloseButton, TagLabel, Text, useToast } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { capitalize, flattenArray } from '../../utils/helper';
 import useFetch from '../../utils/hooks/useFetch';
 import { createChannel } from '../../services/api';
 
-function CreateChannelModal({ isOpen, onClose, users }) {
+function CreateChannelModal({ isOpen, onClose, users, retrieveMessages }) {
 
     const [channelName, setChanneName] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
 
     const { data, error, load, fetchData } = useFetch();
+
+    const toast = useToast();
 
     let filteredUsers = users;
 
@@ -41,15 +43,41 @@ function CreateChannelModal({ isOpen, onClose, users }) {
             user_ids: selectedUsers.map(user => user.id)
         };
         console.log(requestBody)
-        // const { apiUrl, options } = createChannel(requestBody);
-        // fetchData(apiUrl, options);
-        // onClose();
+        const { apiUrl, options } = createChannel(requestBody);
+        fetchData(apiUrl, options);
+        onClose();
     }
+
+    useEffect(() => {
+        if(error){
+            console.error('Failed to create a channel', error);
+            toast({
+                title: 'Failed to create a channel',
+                status: 'error',
+                position: 'top',
+                duration: 5000,
+                isClosable: true
+            })
+        }
+
+        if(data){
+            console.log(data);
+            toast({
+                title: 'New channel was created',
+                status: 'success',
+                position: 'top',
+                duration: 5000,
+                isClosable: true
+            })
+            const channelData = data.data;
+            retrieveMessages(channelData);
+        }
+    })
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent bg="gray.300" w="100%">
+            <ModalContent bg="gray.300" w="100%" >
                 <ModalHeader>
                     Create a channel
                 </ModalHeader>
@@ -96,7 +124,7 @@ function CreateChannelModal({ isOpen, onClose, users }) {
                     <Box
                         overflow="auto"
                         h="auto"
-                        maxH="60vh"
+                        maxH="30vh"
                     >
                         {(searchQuery !== '') && (
                             <List>

@@ -5,7 +5,7 @@ import { fetchMessage, headers, url } from '../../../services/api';
 import useFetch from '../../../utils/hooks/useFetch';
 import CreateChannelModal from '../../common/CreateChannelModal';
 
-function Channel({ channels, retrieveMessages, users }) {
+function Channel({ channels, retrieveMessages, users, handleItemClick, selectedItem }) {
 
   const receiverClass = 'Channel';
 
@@ -17,6 +17,9 @@ function Channel({ channels, retrieveMessages, users }) {
   const { data, error, load, fetchData } = useFetch();
 
   const handleClick = (channel) => {
+
+    handleItemClick(channel);
+
     const { apiUrl, options } = fetchMessage(channel.id, 'Channel');
     setUrl(apiUrl);
     setOptions(options);
@@ -46,27 +49,14 @@ function Channel({ channels, retrieveMessages, users }) {
 
   return (
       <List spacing={3}>
-        <ListItem fontWeight="bold" fontSize="lg">
-          <Flex align="center" justify="space-between">
-            Channels
-            <Icon 
-              as={MdAdd} 
-              ml="2" 
-              cursor="pointer" 
-              color="blue.500" 
-              onClick={handleCreateChannel}
-            />
-          </Flex>
-          {isOpen && (
-            <CreateChannelModal isOpen={isOpen} onClose={onClose} users={users} />
-          )}
-        </ListItem>
         {channels.map((channel) => (
           <ListItem 
             key={channel.id} 
             cursor='pointer' 
             _hover={{ bgColor: 'gray.100' }}
+            borderRadius={5}
             onClick={() => handleClick(channel)}
+            bg={selectedItem && selectedItem.id === channel.id ? 'gray.100' : 'transparent'}
           >
             <Text paddingX='4'># {channel.name}</Text>
           </ListItem>

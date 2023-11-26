@@ -7,8 +7,7 @@ import ChannelMembersModal from '../../common/ChannelMembersModal';
 
 function MessageHeader({ users, receiver = {}, channelDetail, refreshChannel }) {
 
-    const title = receiver ? capitalize(receiver.name) : 'New Message';
-
+    const [title, setTitle] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
     const [channelMembers, setChannelMembers] = useState([]);
     const [isChannel, setIsChannel] = useState(false);
@@ -45,7 +44,11 @@ function MessageHeader({ users, receiver = {}, channelDetail, refreshChannel }) 
     }, [channelDetail])
 
     useEffect(() => {
-        console.log(selectedUser)
+        const sendTo = receiver ? receiver.name : 'New Message';
+        setTitle(sendTo);
+    }, [receiver])
+
+    useEffect(() => {
         if(selectedUser){
             const receiver = selectedUser;
             const receiver_class = "User";
@@ -62,17 +65,18 @@ function MessageHeader({ users, receiver = {}, channelDetail, refreshChannel }) 
                 paddingY="2"
                 borderBottom="1px solid"
                 borderColor="gray.300"
+                
             >
-                <Flex justifyContent="space-between" alignItems="center">
+                <Flex justifyContent="space-between" alignItems="center" minH="40px">
                     <Text fontSize="md" fontWeight="bold">
-                        {title}
+                        {(isChannel && title !== 'New Message') ? '# ' + title : capitalize(title)}
                     </Text>
                     {isChannel && (
                         <>
-                            <Tooltip hasArrow label='View or Add Members' bg='gray.700' color='white' placement='auto'>
-                                <AvatarGroup cursor="pointer" onClick={onMembersClick} size='sm' gap={1.5} max={3}>
+                            <Tooltip hasArrow label='View or Add Members' bg='gray.700' color='white' placement='left'>
+                                <AvatarGroup cursor="pointer" onClick={onMembersClick} size='xs' gap={2} max={3}>
                                     {channelMembers.map((member, index) => (
-                                        <Avatar key={index} name={member.name} borderRadius="9" />
+                                        <Avatar key={index} name={member.name} borderRadius="7" />
                                     ))}
                                 </AvatarGroup>
                             </Tooltip>

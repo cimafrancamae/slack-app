@@ -31,7 +31,6 @@ const MessageDisplay = ({ messages }) => {
           <Box 
               key={index} 
               p="3" 
-              // _hover={{ bgColor: 'gray.50' }}
           >
             <Flex gap='2' alignItems='flex-start' zIndex={1}>
               <Avatar 
