@@ -5,47 +5,18 @@ import { fetchMessage, headers, url } from '../../../services/api';
 import useFetch from '../../../utils/hooks/useFetch';
 import CreateChannelModal from '../../common/CreateChannelModal';
 
-function Channel({ channels, retrieveMessages, users, handleItemClick, selectedItem }) {
+function Channel({ channels, retrieveMessages, handleItemClick, selectedItem }) {
 
   const receiverClass = 'Channel';
 
-  const [apiUrl, setUrl] = useState(null);  
-  const [options, setOptions] = useState({});
-  const [receiver, setReceiver] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
-  
-  const { data, error, load, fetchData } = useFetch();
-
+  // For selecting an item in the channel list
   const handleClick = (channel) => {
 
     handleItemClick(channel);
 
-    const { apiUrl, options } = fetchMessage(channel.id, 'Channel');
-    setUrl(apiUrl);
-    setOptions(options);
-
     const messageReceiver = { ...channel, class: receiverClass}
-    setReceiver(messageReceiver)
+    retrieveMessages(messageReceiver);
   }
-
-  const handleCreateChannel = () => {
-    console.log('click')
-    setIsOpen(true);
-  }
-
-  const onClose = () => {
-    setIsOpen(false);
-  }
-
-  useEffect(() => {
-    if(apiUrl){
-      fetchData(apiUrl, options);
-    }
-  }, [apiUrl, options]);
-
-  useEffect(() => {
-    retrieveMessages(receiver);
-  }, [receiver])
 
   return (
       <List spacing={3}>

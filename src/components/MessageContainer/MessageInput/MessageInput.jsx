@@ -15,82 +15,56 @@ const MessageInput = ({ receiver = {}, onSendMessage }) => {
     setMessage(e.target.value);
   };
   
-  const handleKeyPress = (e) => {
+  const handleSubmit = (e) => {
     if(e.key === 'Enter'){
       e.preventDefault();
-      handleSubmit(e);
-    }
-  }
+      if (message.trim() !== '') {
   
-  const handleSubmit = () => {
-    if (message.trim() !== '') {
-      const requestBody = {
-        receiver_id: receiver.id,
-        receiver_class: receiver.class,
-        body: message
-      }
-
-      try{
+        const requestBody = {
+          receiver_id: receiver.id,
+          receiver_class: receiver.class,
+          body: message
+        }
+  
         const { apiUrl, options } = sendMessage(requestBody);
         fetchData(apiUrl,options);
-      } catch (error){
-        console.error('Error sending message', error)
       }
     }
   };
 
   useEffect(() => {
     if(error){
-      // toast({
-      //   title: 'Failed to send message',
-      //   status: 'error',
-      //   position: 'top',
-      //   duration: 5000,
-      //   isClosable: true
-      // });
+      toast({
+        title: 'Failed to send message',
+        status: 'error',
+        position: 'top',
+        duration: 5000,
+        isClosable: true
+      });
     } 
-
     if(data){
-      onSendMessage();
+      onSendMessage(receiver);
       setMessage('');
     }
 
   }, [data, error, load])
 
   return (
-    <Box 
-      // p="3" 
-      // borderTop="1px solid" 
-      // borderColor="gray.300" 
-      display="flex"
-    >
-      <InputGroup display="flex" alignItems="center" justifyContent="center">
+    <Box display="flex">
+      <InputGroup >
         <Input
           placeholder="Type your message..."
           value={message}
           onChange={handleInputChange}
-          onKeyDown={handleKeyPress}
+          onKeyDown={handleSubmit}
           flex="1"
-          // marginRight="2"
           h="4rem"
           borderColor="gray.300"
         />
-        <InputRightElement color='gray.500' padding={1}>
+        <InputRightElement color='gray.500' padding={1} h="4rem">
           <MdSend size={50}  />
         </InputRightElement>
       </InputGroup>
-      {/* <Button
-        colorScheme="blue"
-        aria-label="Send Message"
-        onClick={handleSubmit}
-        h="4rem" 
-        w="4rem" 
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <MdSend size={24} />
-      </Button> */}
     </Box>
   );
 };

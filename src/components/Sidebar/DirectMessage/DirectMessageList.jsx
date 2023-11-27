@@ -5,6 +5,8 @@ import SearchUserModal from '../../common/ChannelMembersModal';
 
 function DirectMessage({ messages, retrieveMessages, handleItemClick, selectedItem }) {
 
+  console.log(messages);
+
     const handleSelectedUser = (message) => {
       retrieveMessages(message);
     }

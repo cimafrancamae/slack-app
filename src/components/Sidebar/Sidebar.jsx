@@ -5,29 +5,29 @@ import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import CreateChannelModal from '../common/CreateChannelModal';
 
-const Sidebar = ({ channels, messages, retrieveMessages, messageReceiver, users }) => {
+const Sidebar = ({ channels, messages, retrieveMessages, users }) => {
 
   const [selectedItem, setSelectedItem] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [defaultIndexes, setDefaultIndexes] = useState([0,1]);
 
-  const handleItemClick = (item) => {
-    setSelectedItem(item);
-  }
+  // Returns the selected item in sidebar
+  const handleItemClick = (item) => setSelectedItem(item);
 
+  // For create channel modal
   const handleCreateChannel = () => {
-    console.log('click')
+    handleNewMessage();
     setIsOpen(true);
-  }
+  };
 
+  // For new direct message or channel
   const handleNewMessage = () => {
     setSelectedItem(null);
     retrieveMessages(null);
   }
 
-  const onClose = () => {
-    setIsOpen(false);
-  }
+  // For closing create channel modal
+  const onClose = () => setIsOpen(false);
 
   return (
     <div className="sidebar-container">
@@ -65,8 +65,7 @@ const Sidebar = ({ channels, messages, retrieveMessages, messageReceiver, users 
             <AccordionPanel pb={4}>
               <ChannelList 
                 channels={channels} 
-                retrieveMessages={retrieveMessages} 
-                users={users} 
+                retrieveMessages={retrieveMessages}
                 handleItemClick={handleItemClick}
                 selectedItem={selectedItem}
               />

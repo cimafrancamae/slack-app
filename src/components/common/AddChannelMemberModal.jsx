@@ -27,7 +27,7 @@ import { capitalize, flattenArray } from '../../utils/helper';
 import useFetch from '../../utils/hooks/useFetch';
 import { addChannelMember } from '../../services/api';
 
-const AddChannelMemberModal = ({ users, channel, members, isOpen, onClose, refreshChannel }) => {
+const AddChannelMemberModal = ({ users, channel, members, isOpen, onClose, retrieveChannelData }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
 
@@ -69,7 +69,7 @@ const AddChannelMemberModal = ({ users, channel, members, isOpen, onClose, refre
             fetchData(apiUrl, options);
         });
         console.log(channel.id)
-        refreshChannel(channel.id);
+        retrieveChannelData(channel.id);
     }
 
     useEffect(() => {
