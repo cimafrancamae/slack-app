@@ -5,10 +5,11 @@ import LogoutPopover from './components/LogoutPopover';
 import { useState } from 'react';
 
 const Header = ({ signedInUser }) => {
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Handles Popup Menu at header avatar
   const handlePopOver = () => {
-    console.log(isMenuOpen);
     setIsMenuOpen(!isMenuOpen);
   }
 
@@ -32,7 +33,6 @@ const Header = ({ signedInUser }) => {
           placeholder="Search..." 
         />
       </InputGroup>
-
       <Flex align="center">
         <IconButton 
           aria-label="Search notifications" 

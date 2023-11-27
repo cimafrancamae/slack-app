@@ -5,7 +5,7 @@ import { Flex } from '@chakra-ui/layout';
 import { fetchAllUsers, fetchChannel, fetchMessage, fetchUserChannels } from '../../services/api';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
-import { capitalize, getLastTenUsers } from '../../utils/helper';
+import { capitalize, getChannelMembers, getDMUsers, getLastTenUsers } from '../../utils/helper';
 import useFetch from '../../utils/hooks/useFetch';
 import { fetchDataForLastTenUsers } from '../../services/api';
 import MessageContainer from '../../components/MessageContainer/MessageContainer';
@@ -14,6 +14,7 @@ function HomePage() {
     const uid = localStorage.getItem('uid').split('@')[0];
     const signedInUser = capitalize(uid);
 
+    // const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [messageReceiver, setMessageReceiver] = useState(null);
     const [channel, setChannel] = useState(null);
@@ -27,66 +28,44 @@ function HomePage() {
     const { data: channelData, error: channelError, load: channelLoading, fetchData: fetchChannelDetail } = useFetch();
     const { data: messagesData, error: messagesError, load: messagesLoading, fetchData: fetchMessages } = useFetch();
 
+    const toast = useToast();
 
     let channelList = [
       { id: 1, name: 'general' },
       { id: 2, name: 'random' },
     ];
 
+    // Define channels to display on sidebar
     if (userChannelData && Array.isArray(userChannelData.data)) {
       channelList = channelList.concat(userChannelData.data.map(channel => ({ id: channel.id, name: channel.name })));
     }
     
-    const toast = useToast();
-
-    const refreshChannel = (id) => {
+    // Check for channel updates such as new members
+    const retrieveChannelData = (id) => {
       const { apiUrl, options } = fetchChannel(id);
       fetchChannelDetail(apiUrl, options);
     }
 
-    const handleSendMessage = () => {
-      if(messageReceiver){
-        const { apiUrl, options } = fetchMessage(messageReceiver.id, messageReceiver.class);
-        fetchMessages(apiUrl, options);
-      } else {
-        setMessages([]);
-      }
-  }
-
+    // Retrieve messages from specific users or channels
     const retrieveMessages = (receiver) => {
+      setMessages([]);
+      setMessageReceiver(receiver);
       if(receiver){
         if(receiver.class === 'Channel'){
-          refreshChannel(receiver.id)
+          retrieveChannelData(receiver.id)
         }
+        const { apiUrl, options } = fetchMessage(receiver.id, receiver.class);
+        fetchMessages(apiUrl, options);
       } 
-      setMessageReceiver(receiver);
     }
 
-    useEffect(() => {
-      if(channelError){
-        console.error('Error fetching channel detail', channelError)
-      }
-
-      if(channelData){
-        setChannel(channelData.data);
-        setLoading(channelLoading)
-      }
-
-      if(channelLoading){
-        setLoading(channelLoading);
-      }
-    }, [channelData, channelError, channelLoading])
-
+    // For initial load of all users and channels
     useEffect(() => {
       fetchUsers(userUrl, userOptions);
       fetchChannels(userChannelUrl, userChannelOptions);
-    }, [userUrl, userChannelUrl])
+    }, [userUrl, userChannelUrl]);
 
-    // useEffect(() => {
-    //     const lastTenUsersData = fetchDataForLastTenUsers(userData);
-    //     console.log(lastTenUsersData);
-    // }, [userData]);
-
+    // For fetch all users response
     useEffect(() => {
       if (userError) {
         console.error('User Error:', userError);
@@ -102,8 +81,9 @@ function HomePage() {
         setLoading(userLoading);
         localStorage.setItem('users', JSON.stringify(userData));
       }
-    }, [userData, userError, userLoading, toast])
+    }, [userData, userError, userLoading, toast]);
 
+    // For fetch all channels response
     useEffect(() => {
       if (userChannelError) {
         console.error('Channel Error:', userChannelError);
@@ -116,11 +96,28 @@ function HomePage() {
         });
       }
       if (userChannelData) {
+        getDMUsers(userChannelData);
         setLoading(userChannelLoading);
         localStorage.setItem('channels', JSON.stringify(userChannelData));
       }
-    }, [userChannelData, userChannelError, userChannelLoading, toast])
+    }, [userChannelData, userChannelError, userChannelLoading, toast]);
 
+    // For fetch specific channel details response
+    useEffect(() => {
+      if(channelError){
+        console.error('Error fetching channel detail', channelError)
+      }
+      if(channelData){
+        const data = channelData.data
+        setChannel(data);
+        setLoading(channelLoading)
+      }
+      if(channelLoading){
+        setLoading(channelLoading);
+      }
+    }, [channelData, channelError, channelLoading]);
+
+    // For fetch messages response
     useEffect(() => {
       if(messagesError){
         console.log('error', messagesError);
@@ -133,19 +130,16 @@ function HomePage() {
           isClosable: true
         })
       }
-
       if(messagesData){
         setMessages(messagesData.data.map(message => message));
         setLoading(messagesLoading);
       } else {
         setMessages([]);
       }
-
       if(messagesLoading){
         setLoading(messagesLoading);
       }
-
-    }, [messagesData, messagesError, messagesLoading, toast])
+    }, [messagesData, messagesError, messagesLoading, toast]);
 
     return (
         <div className='home-container'>
@@ -158,7 +152,6 @@ function HomePage() {
                   channels={channelList} 
                   messages={messages}
                   retrieveMessages={retrieveMessages} 
-                  messageReceiver={messageReceiver} 
                   users={userData}
                 />
                 <MessageContainer 
@@ -166,8 +159,7 @@ function HomePage() {
                   messages={messages}
                   users={userData}
                   channelDetail={channel}
-                  refreshChannel={refreshChannel}
-                  handleSendMessage={handleSendMessage}
+                  retrieveChannelData={retrieveChannelData}
                   retrieveMessages={retrieveMessages}
                 />
             </Flex>

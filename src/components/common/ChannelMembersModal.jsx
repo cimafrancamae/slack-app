@@ -5,11 +5,10 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { MdPersonAdd } from 'react-icons/md';
 import AddChannelMemberModal from './AddChannelMemberModal';
 
-const ChannelMembersModal = ({ channel, members, isOpen, onClose, users, onUserSelect, refreshChannel }) => {
+const ChannelMembersModal = ({ channel, members, isOpen, onClose, users, retrieveChannelData, retrieveMessages }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [addMember, setAddMember] = useState(false);
-  const [selectedUser, setSelectedUser] = useState([]);
 
   const filteredMembers = members.filter((member) => {
     return member.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -20,10 +19,9 @@ const ChannelMembersModal = ({ channel, members, isOpen, onClose, users, onUserS
   const handleSearch = (e) => setSearchQuery(e.target.value);
 
   const handleSelectedUser = (user) => {
-    const userName = user.email.split('@')[0]
-    setSelectedUser(user.id);
-    setSearchQuery(userName);
-    onUserSelect(user);
+    const messageReceiver = { id: user.id, name: user.name, class: 'User'};
+    retrieveMessages(messageReceiver);
+    onClose();
   }
 
   return (
@@ -78,7 +76,7 @@ const ChannelMembersModal = ({ channel, members, isOpen, onClose, users, onUserS
                   members={members}
                   isOpen={isOpen}
                   onClose={onAddMemberClose} 
-                  refreshChannel={refreshChannel}
+                  retrieveChannelData={retrieveChannelData}
                 />
               )}
               {filteredMembers.map((member) => (

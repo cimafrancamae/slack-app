@@ -14,6 +14,7 @@ function LogoutPopover({ signedInUser, handlePopOver }) {
 
     const navigate = useNavigate();
 
+    // Logout
     const handleLogout = () => {
         localStorage.clear();
         navigate('/');

@@ -7,6 +7,7 @@ import { capitalize } from '../../../utils/helper';
 import chatBg from '../../../../public/chat bg.jpg';
 
 const MessageDisplay = ({ messages }) => {
+
   const containerRef = useRef(null);
 
   useEffect(() => {
