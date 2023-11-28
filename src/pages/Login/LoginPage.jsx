@@ -52,6 +52,7 @@ const LoginPage = () => {
         const response = await loginUser(formData);
         if(response){
             console.log('Login Successful:', response);
+            localStorage.setItem('id',response.data.id);
             setLoading(false);
             
             toast({

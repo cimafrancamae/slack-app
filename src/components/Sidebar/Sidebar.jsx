@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import CreateChannelModal from '../common/CreateChannelModal';
 
-const Sidebar = ({ channels, directMessages, retrieveMessages, users }) => {
+const Sidebar = ({ channels, directMessages, retrieveMessages, users, dmLoading }) => {
   
   const [selectedItem, setSelectedItem] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -93,6 +93,7 @@ const Sidebar = ({ channels, directMessages, retrieveMessages, users }) => {
                 retrieveMessages={retrieveMessages}
                 handleItemClick={handleItemClick} 
                 selectedItem={selectedItem}
+                dmLoading={dmLoading}
               />
             </AccordionPanel>
           </AccordionItem>

@@ -10,8 +10,9 @@ import useFetch from '../../utils/hooks/useFetch';
 import MessageContainer from '../../components/MessageContainer/MessageContainer';
 
 function HomePage() {
-    const uid = localStorage.getItem('uid').split('@')[0];
-    const signedInUser = capitalize(uid);
+    const userId = localStorage.getItem('id');
+    const uid = localStorage.getItem('uid');
+    const signedInUser = capitalize(uid.split('@')[0]);
 
     const [loading, setLoading] = useState(false);
     const [messageReceiver, setMessageReceiver] = useState(null);
@@ -20,6 +21,8 @@ function HomePage() {
     const [messages, setMessages] = useState([]);
     const [dmUsers, setDmUsers] = useState([]);
     const [directMessages, setDirectMessages] = useState([]);
+    const [dmLoading, setDmLoading] = useState(true);
+    const [channels, setChannels] = useState([]);
 
     const { apiUrl: userUrl, options: userOptions } = fetchAllUsers();
     const { apiUrl: userChannelUrl, options: userChannelOptions } = fetchUserChannels();
@@ -35,13 +38,8 @@ function HomePage() {
       { id: 1, name: 'general' },
       { id: 2, name: 'random' },
     ];
-
-    // Define channels to display on sidebar
-    if (userChannelData && Array.isArray(userChannelData.data)) {
-      channelList = channelList.concat(userChannelData.data.map(channel => ({ id: channel.id, name: channel.name })));
-    }
     
-    // Check for channel updates such as new members
+    // Check for channel updates 
     const retrieveChannelData = (id) => {
       const { apiUrl, options } = fetchChannel(id);
       fetchChannelDetail(apiUrl, options);
@@ -54,11 +52,9 @@ function HomePage() {
       setMessageReceiver(receiver);
       
       if(receiver){
-
         if(receiver.class === 'Channel'){
           retrieveChannelData(receiver.id)
         }
-  
         const { apiUrl, options } = fetchMessage(receiver.id, receiver.class);
         fetchMessages(apiUrl, options);
       } 
@@ -90,7 +86,6 @@ function HomePage() {
 
     // For fetch all channels response
     useEffect(() => {
-
       if (userChannelError) {
         console.error('Channel Error:', userChannelError);
         toast({
@@ -103,66 +98,77 @@ function HomePage() {
       }
       if (userChannelData) {
         setLoading(userChannelLoading);
+
+        // Define channels to display on sidebar
+        if (userChannelData && Array.isArray(userChannelData.data)) {
+          channelList = channelList.concat(userChannelData.data.map(channel => ({ id: channel.id, name: channel.name })));
+          setChannels(channelList);
+        }
         localStorage.setItem('channels', JSON.stringify(userChannelData));
       }
-
     }, [userChannelData, userChannelError, userChannelLoading, toast]);
 
     // Fetching user channels' details
     useEffect(() => {
       const fetchData = async () => {
-        try{
-          const data = await fetchAllUserChannelDetails(userChannelData);
-          if(data){
-            setChannelDetails(data);
+        if(userChannelData && !userChannelData.errors){
+          try{
+            const data = await fetchAllUserChannelDetails(userChannelData);
+            if(data){
+              setChannelDetails(data);
+            }
+          } catch (error){
+            console.log('Error fetching channel details',error)
           }
-        } catch (error){
-          console.log('Error fetching channel details',error)
         }
       }
-
       fetchData();
-    }, [userChannelData])
+    }, [userChannelData, toast])
 
     // Retrieving user channels members
     useEffect(() => {
       let members = [];
-
       if(channelDetails){
         channelDetails.forEach(channel => {
           const channelMembers = getChannelMembers(channel.data, userData);
           members.push(channelMembers);
         });
       }
-
       const users = getDmUsers(members);
       setDmUsers(users);
-
     }, [channelDetails, userData]);
 
     // Retrieving direct messages
     useEffect(() => {
       const fetchData =  async () => {
-        try {
-          
-          const dms = await fetchDirectMessages(dmUsers);
-          if(dms) {
-            const receivers = dms.map(m => {
-              const uId = m.data[0].receiver.id;
-              const uName = m.data[0].receiver.uid.split('@')[0];
-              const uClass = 'User';
+        if(dmUsers && dmUsers.length){
+          try {       
+            const dms = await fetchDirectMessages(dmUsers);
+            if(dms) {
+              const dm = dms.map(m => {
 
-              return { id: uId, name: uName, class: uClass};
-            });
+                const receiverId = m.data[0].receiver.id;
+                const receiverName = m.data[0].receiver.uid;
+                const senderId = m.data[0].sender.id;
+                const senderName = m.data[0].sender.uid;
 
-            setDirectMessages(receivers);
+                const label = uid === receiverName ? senderName : receiverName;
+                const uId = userId === receiverId.toString() ? senderId : receiverId; 
+
+                const uName = label.split('@')[0];
+                const uclass = 'User';
+
+                return { id: uId, name: uName, class: uclass }
+              });
+              setDirectMessages(dm);
+            }
+          } catch (error) {
+            console.error('Failed to retrieve direct messages');
+          }finally {
+            setDmLoading(false);
           }
-  
-        } catch (error) {
-          console.error('Failed to retrieve direct messages');
-        }
+        } 
       }
-
       fetchData();
     }, [dmUsers]);
 
@@ -213,10 +219,11 @@ function HomePage() {
             <Header signedInUser={signedInUser} />
             <Flex  maxH='50%'>
                 <Sidebar 
-                  channels={channelList} 
+                  channels={channels}
                   directMessages={directMessages}
                   retrieveMessages={retrieveMessages} 
                   users={userData}
+                  dmLoading={dmLoading}
                 />
                 <MessageContainer 
                   messageReceiver={messageReceiver} 

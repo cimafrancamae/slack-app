@@ -24,7 +24,7 @@ const Header = ({ signedInUser }) => {
       <div>
         <img src={logo} className='header-logo' title='logo' />
       </div>
-      <InputGroup size="xs" maxW="md" mr={4}>
+      <InputGroup size="xs" maxW="md" marginX={4} >
         <InputLeftElement>
           <SearchIcon color="gray.500"  />
         </InputLeftElement>
