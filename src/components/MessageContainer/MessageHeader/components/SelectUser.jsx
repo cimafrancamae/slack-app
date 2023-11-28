@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { Box, Text, Input, List, ListItem, Avatar, InputGroup, InputLeftAddon } from '@chakra-ui/react';
 import { flattenArray } from '../../../../utils/helper';
 
-function SelectUser({ users }) {
+function SelectUser({ users, retrieveMessages }) {
+    
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
 
     let filteredUsers = users;
 
     if(users){
-        const flattenedUsers = flattenArray(users.data);
-        filteredUsers = flattenedUsers.filter((user) => {
+        filteredUsers = users.filter((user) => {
             user.name = user.email.split('@')[0];       
             return user.name.toLowerCase().includes(searchQuery.toLowerCase())
         });
@@ -21,12 +21,11 @@ function SelectUser({ users }) {
         setSearchQuery(e.target.value);
     }
 
-
     const handleSelectedUser = (user) => {
         const userName = user.email.split('@')[0]
         setSelectedUser(user.id);
         setSearchQuery(userName);
-        // onUserSelect(user);
+        retrieveMessages({id: user.id, name: user.name, class: 'User'});
       }
 
     return (
@@ -45,7 +44,7 @@ function SelectUser({ users }) {
                         children="To: " 
                     />
                     <Input
-                        type='text'
+                        type='search'
                         placeholder="Search users..."
                         value={searchQuery}
                         onChange={handleSearch}

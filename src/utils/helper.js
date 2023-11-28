@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { fetchMessage } from "../services/api";
 
 export function flattenArray(arr) {
     return arr.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenArray(val)) : acc.concat(val), [])
+}
+
+export function removeDuplicates(arr) {
+    return [...new Set(arr)];
 }
 
 export function capitalize(string) {
@@ -23,7 +27,8 @@ export function getUserInfo(userId, users) {
 }
 
 export function getChannelMembers (channelDetail, users) {
-    if(channelDetail && channelDetail.channel_members){
+
+    if(channelDetail && channelDetail.channel_members && users){
         const members = channelDetail.channel_members.map(member => member.user_id);
         const membersInfo = members.map(member => {
             const userInfo = getUserInfo(member, users);
@@ -34,16 +39,10 @@ export function getChannelMembers (channelDetail, users) {
     return [];
 }
 
-export function getDMUsers(channels) {
-    const users = JSON.parse(localStorage.getItem('users'));
-    console.log(channels, users);
-    if(channels && users){
-        let usersChannelMembers = [];
-        channels.forEach(channel => {
-            const channelMembers = getChannelMembers(channel,users);
-            usersChannelMembers.push(channelMembers);
-            console.log(usersChannelMembers);
-        });
-        localStorage.setItem('dmUsers', usersChannelMembers);
-    }
+export function getDmUsers(users) {
+    const flattenedUsers = flattenArray(users);
+    const dmUsers = removeDuplicates(flattenedUsers);
+    localStorage.setItem('dm-users', JSON.stringify(dmUsers));
+
+    return dmUsers;
 }

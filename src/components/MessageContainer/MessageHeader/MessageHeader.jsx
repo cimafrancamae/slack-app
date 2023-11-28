@@ -5,7 +5,7 @@ import { capitalize, getChannelMembers, getUserInfo } from '../../../utils/helpe
 import SearchUserModal from '../../common/ChannelMembersModal';
 import ChannelMembersModal from '../../common/ChannelMembersModal';
 
-function MessageHeader({ users, receiver = {}, channelDetail, retrieveChannelData, retrieveMessages }) {
+function MessageHeader({ users, dmUsers, receiver = {}, channelDetail, retrieveChannelData, retrieveMessages }) {
 
     const [title, setTitle] = useState('');
     const [channelMembers, setChannelMembers] = useState([]);
@@ -87,7 +87,7 @@ function MessageHeader({ users, receiver = {}, channelDetail, retrieveChannelDat
                 </Flex>
             </Box>
             {!receiver && (
-                <SelectUser users={users} />
+                <SelectUser users={dmUsers} retrieveMessages={retrieveMessages} />
             )}
         </>
     );

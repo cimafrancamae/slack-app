@@ -2,23 +2,24 @@ import React, { useEffect, useRef, useState } from 'react';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { Flex } from '@chakra-ui/layout';
-import { fetchAllUsers, fetchChannel, fetchMessage, fetchUserChannels } from '../../services/api';
+import { fetchAllUserChannelDetails, fetchAllUsers, fetchChannel, fetchDirectMessages, fetchMessage, fetchUserChannels } from '../../services/api';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
-import { capitalize, getChannelMembers, getDMUsers, getLastTenUsers } from '../../utils/helper';
+import { capitalize, getChannelMembers, getDmUsers } from '../../utils/helper';
 import useFetch from '../../utils/hooks/useFetch';
-import { fetchDataForLastTenUsers } from '../../services/api';
 import MessageContainer from '../../components/MessageContainer/MessageContainer';
 
 function HomePage() {
     const uid = localStorage.getItem('uid').split('@')[0];
     const signedInUser = capitalize(uid);
 
-    // const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [messageReceiver, setMessageReceiver] = useState(null);
     const [channel, setChannel] = useState(null);
+    const [channelDetails, setChannelDetails] = useState(null);
     const [messages, setMessages] = useState([]);
+    const [dmUsers, setDmUsers] = useState([]);
+    const [directMessages, setDirectMessages] = useState([]);
 
     const { apiUrl: userUrl, options: userOptions } = fetchAllUsers();
     const { apiUrl: userChannelUrl, options: userChannelOptions } = fetchUserChannels();
@@ -47,13 +48,17 @@ function HomePage() {
     }
 
     // Retrieve messages from specific users or channels
-    const retrieveMessages = (receiver) => {
+    const retrieveMessages = (receiver) => {   
+
       setMessages([]);
       setMessageReceiver(receiver);
+      
       if(receiver){
+
         if(receiver.class === 'Channel'){
           retrieveChannelData(receiver.id)
         }
+  
         const { apiUrl, options } = fetchMessage(receiver.id, receiver.class);
         fetchMessages(apiUrl, options);
       } 
@@ -85,6 +90,7 @@ function HomePage() {
 
     // For fetch all channels response
     useEffect(() => {
+
       if (userChannelError) {
         console.error('Channel Error:', userChannelError);
         toast({
@@ -96,11 +102,69 @@ function HomePage() {
         });
       }
       if (userChannelData) {
-        getDMUsers(userChannelData);
         setLoading(userChannelLoading);
         localStorage.setItem('channels', JSON.stringify(userChannelData));
       }
+
     }, [userChannelData, userChannelError, userChannelLoading, toast]);
+
+    // Fetching user channels' details
+    useEffect(() => {
+      const fetchData = async () => {
+        try{
+          const data = await fetchAllUserChannelDetails(userChannelData);
+          if(data){
+            setChannelDetails(data);
+          }
+        } catch (error){
+          console.log('Error fetching channel details',error)
+        }
+      }
+
+      fetchData();
+    }, [userChannelData])
+
+    // Retrieving user channels members
+    useEffect(() => {
+      let members = [];
+
+      if(channelDetails){
+        channelDetails.forEach(channel => {
+          const channelMembers = getChannelMembers(channel.data, userData);
+          members.push(channelMembers);
+        });
+      }
+
+      const users = getDmUsers(members);
+      setDmUsers(users);
+
+    }, [channelDetails, userData]);
+
+    // Retrieving direct messages
+    useEffect(() => {
+      const fetchData =  async () => {
+        try {
+          
+          const dms = await fetchDirectMessages(dmUsers);
+          if(dms) {
+            const receivers = dms.map(m => {
+              const uId = m.data[0].receiver.id;
+              const uName = m.data[0].receiver.uid.split('@')[0];
+              const uClass = 'User';
+
+              return { id: uId, name: uName, class: uClass};
+            });
+
+            setDirectMessages(receivers);
+          }
+  
+        } catch (error) {
+          console.error('Failed to retrieve direct messages');
+        }
+      }
+
+      fetchData();
+    }, [dmUsers]);
 
     // For fetch specific channel details response
     useEffect(() => {
@@ -150,7 +214,7 @@ function HomePage() {
             <Flex  maxH='50%'>
                 <Sidebar 
                   channels={channelList} 
-                  messages={messages}
+                  directMessages={directMessages}
                   retrieveMessages={retrieveMessages} 
                   users={userData}
                 />
@@ -158,6 +222,7 @@ function HomePage() {
                   messageReceiver={messageReceiver} 
                   messages={messages}
                   users={userData}
+                  dmUsers={dmUsers}
                   channelDetail={channel}
                   retrieveChannelData={retrieveChannelData}
                   retrieveMessages={retrieveMessages}
