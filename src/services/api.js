@@ -1,5 +1,6 @@
 import useFetch from "../utils/hooks/useFetch";
-import { getLastTenUsers } from "../utils/helper";
+import { getChannelMembers, getLastTenUsers } from "../utils/helper";
+import { useEffect, useState } from "react";
 
 export const url = 'http://206.189.91.54/api/v1';
 export const headers = {
@@ -153,6 +154,68 @@ export const addChannelMember = (requestBody) => {
     apiUrl = `${url}/channel/add_member`;
 
     return { apiUrl, options };
+}
+
+export async function fetchAllUserChannelDetails(channels) {
+
+    let channelData = [];
+    
+    if(channels){
+        const requests = channels.data.map(async (channel) => {
+            try {
+                const { apiUrl, options } = fetchChannel(channel.id);
+                const response = await fetch(apiUrl,options);
+
+                if(!response.ok){
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                return result;
+
+            } catch (error){
+                console.log('Failed to fetch channel detail',error)
+                return null;
+            }
+        });
+
+        channelData = await Promise.all(requests);
+    }
+
+    return channelData;
+}
+
+export async function fetchDirectMessages(users) {
+
+    let messages = [];
+
+    if(users){
+        
+        const requests = users.map(async (user) => {
+            try {
+                const { apiUrl, options } = fetchMessage(user.id, 'User');
+                const response = await fetch(apiUrl, options);
+
+                if(!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+                return result;
+
+            } catch (error) {
+                console.error('Failed to retrieve direct messages', error);
+                return null;
+            }
+            
+        });
+
+        messages = await Promise.all(requests);
+    }
+
+    const directMessages = messages.filter(message => message.data && message.data.length > 0);
+    
+    return directMessages;
 }
 
 export const fetchDataForLastTenUsers = async (users) => {

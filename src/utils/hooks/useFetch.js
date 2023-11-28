@@ -25,10 +25,6 @@ const useFetch = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchData();
-  // },[])
-
   return { data, error, load, fetchData };
 };
 

@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import CreateChannelModal from '../common/CreateChannelModal';
 
-const Sidebar = ({ channels, messages, retrieveMessages, users }) => {
-
+const Sidebar = ({ channels, directMessages, retrieveMessages, users }) => {
+  
   const [selectedItem, setSelectedItem] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [defaultIndexes, setDefaultIndexes] = useState([0,1]);
@@ -44,14 +44,14 @@ const Sidebar = ({ channels, messages, retrieveMessages, users }) => {
       >
         <Accordion 
           defaultIndex={defaultIndexes} 
-          allowToggle
+          allowMultiple
         >
           <AccordionItem>
             <h2>
               <Flex align="center" justify="space-between">
                 <AccordionButton>
-                  <Text fontWeight="bold">Channels</Text>
                   <AccordionIcon />
+                  <Text fontWeight="bold">Channels</Text>
                 </AccordionButton>
                 <Icon 
                   as={MdAdd} 
@@ -75,8 +75,8 @@ const Sidebar = ({ channels, messages, retrieveMessages, users }) => {
             <h2>
               <Flex align="center" justify="space-between">
                 <AccordionButton>
-                  <Text fontWeight="bold">Direct Messages</Text>
                   <AccordionIcon />
+                  <Text fontWeight="bold">Direct Messages</Text>
                 </AccordionButton>
                 <Icon 
                   as={MdAdd} 
@@ -89,7 +89,7 @@ const Sidebar = ({ channels, messages, retrieveMessages, users }) => {
             </h2>
             <AccordionPanel pb={4}>
               <DirectMessageList 
-                messages={messages}
+                directMessages={directMessages}
                 retrieveMessages={retrieveMessages}
                 handleItemClick={handleItemClick} 
                 selectedItem={selectedItem}
