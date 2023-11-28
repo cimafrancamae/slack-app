@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarGroup, Box, Flex, Text, Tooltip } from '@chakra-ui/react';
-import SelectUser from './components/SelectUser';
+import SelectUser from '../../common/SelectUser';
 import { capitalize, getChannelMembers, getUserInfo } from '../../../utils/helper';
 import SearchUserModal from '../../common/ChannelMembersModal';
 import ChannelMembersModal from '../../common/ChannelMembersModal';

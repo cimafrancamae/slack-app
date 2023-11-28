@@ -37,7 +37,6 @@ function CreateChannelModal({ isOpen, onClose, users, retrieveMessages }) {
     }
 
     const handleSubmit = () => {
-        console.log(channelName, selectedUsers)
         const requestBody = {
             name: channelName,
             user_ids: selectedUsers.map(user => user.id)
@@ -45,7 +44,6 @@ function CreateChannelModal({ isOpen, onClose, users, retrieveMessages }) {
         console.log(requestBody)
         const { apiUrl, options } = createChannel(requestBody);
         fetchData(apiUrl, options);
-        onClose();
     }
 
     useEffect(() => {
@@ -59,9 +57,7 @@ function CreateChannelModal({ isOpen, onClose, users, retrieveMessages }) {
                 isClosable: true
             })
         }
-
         if(data){
-            console.log(data);
             toast({
                 title: 'New channel was created',
                 status: 'success',
@@ -71,8 +67,9 @@ function CreateChannelModal({ isOpen, onClose, users, retrieveMessages }) {
             })
             const channelData = data.data;
             retrieveMessages(channelData);
+            onClose();
         }
-    })
+    }, [data, error, load, retrieveMessages, toast])
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>

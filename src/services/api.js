@@ -190,7 +190,6 @@ export async function fetchDirectMessages(users) {
     let messages = [];
 
     if(users){
-        
         const requests = users.map(async (user) => {
             try {
                 const { apiUrl, options } = fetchMessage(user.id, 'User');

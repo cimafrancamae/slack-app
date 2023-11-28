@@ -8,7 +8,15 @@ import chatBg from '../../../../public/chat bg.jpg';
 
 const MessageDisplay = ({ messages }) => {
 
+  const userId = localStorage.getItem('id');
   const containerRef = useRef(null);
+  let isUser = false;
+
+  const msgStyles = {
+    backgroundColor: isUser ? '#DCF8C6' : '#EAEAEA',
+    marginLeft: isUser ? 'auto' : '0',
+    marginRight: isUser ? '0' : 'auto',
+  }
 
   useEffect(() => {
     if(containerRef.current){
@@ -28,29 +36,52 @@ const MessageDisplay = ({ messages }) => {
           overflowY="auto"
           ref={containerRef}
       >
-        {messages.map((message, index) => (
-          <Box 
-              key={index} 
-              p="3" 
-          >
-            <Flex gap='2' alignItems='flex-start' zIndex={1}>
-              <Avatar 
-                name={message.sender.email.split('@')[0]} 
-                size='sm' 
-                borderRadius='5' 
-              />
-              <div className='message-bubble'>
-                <Text 
-                  fontWeight='bold' 
-                  fontSize='sm'
-                >
-                  {capitalize(message.sender.email.split('@')[0])}
-                </Text>
-                <Text fontSize='sm'>{message.body}</Text>
-              </div>
-            </Flex>
-          </Box>
-        ))}
+        {messages.map((message, index) => {
+          const isCurrentUser = userId === message.sender.id.toString();
+          const msgStyles = {
+            marginLeft: isCurrentUser ? 'auto' : '0',
+            marginRight: isCurrentUser ? '0' : 'auto',
+            alignText: isCurrentUser ? 'right' : 'left',
+            justifyContent: isCurrentUser ? 'flex-end' : 'flext-start',
+            borderRadius: '5px',
+            padding: '10px',
+            maxWidth: '100%', 
+            minWidth: '100%', 
+            wordWrap: 'break-word',
+          };
+
+          return (
+            <Box 
+                key={index} 
+                p="3" 
+            >
+              <Flex gap='2' alignItems='flex-start' zIndex={1} style={msgStyles}>
+              {!isCurrentUser && (
+                  <Avatar 
+                    name={message.sender.email.split('@')[0]} 
+                    size='sm' 
+                    borderRadius='5' 
+                  />
+                )}
+                <div className='message-bubble'>
+                  <Text 
+                    fontWeight='bold' 
+                    fontSize='sm'
+                  >
+                    {capitalize(message.sender.email.split('@')[0])}
+                  </Text>
+                  <Text fontSize='sm'>{message.body}</Text>
+                </div>
+                {isCurrentUser && (
+                  <Avatar 
+                    name={message.sender.email.split('@')[0]} 
+                    size='sm' 
+                    borderRadius='5' 
+                  />
+                )}
+              </Flex>
+            </Box>
+        )})}
       </Box>
     </>
   );

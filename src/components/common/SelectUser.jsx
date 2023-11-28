@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Box, Text, Input, List, ListItem, Avatar, InputGroup, InputLeftAddon } from '@chakra-ui/react';
-import { flattenArray } from '../../../../utils/helper';
+import { Box, Text, Input, List, ListItem, Avatar, InputGroup, InputLeftAddon, Popover, PopoverContent } from '@chakra-ui/react';
+import { flattenArray } from '../../utils/helper';
 
 function SelectUser({ users, retrieveMessages }) {
     
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
 
-    let filteredUsers = users;
+    let filteredUsers = [];
 
     if(users){
         filteredUsers = users.filter((user) => {
@@ -57,7 +57,7 @@ function SelectUser({ users, retrieveMessages }) {
                 >
                     {(searchQuery !== '' && !selectedUser) && (
                         <List>
-                            {filteredUsers ? filteredUsers.map((user) => (
+                            {filteredUsers && filteredUsers.length ? filteredUsers.map((user) => (
                             <ListItem 
                                 key={user.id} 
                                 cursor="pointer" 
@@ -71,7 +71,9 @@ function SelectUser({ users, retrieveMessages }) {
                                 <Avatar name={user.name} size="xs" borderRadius="5" />
                                 <Text fontSize="sm">{user.name}</Text>
                             </ListItem>
-                            )) : <Text fontSize="xs">No users found</Text>}
+                            )) : (
+                                <Text fontSize="xs" fontWeight="bold" color="red" paddingY={4}>No users found</Text>
+                            )}
                         </List>
                     )}
                 </Box>

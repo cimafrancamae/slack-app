@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { List, ListItem, Flex, Icon, Text } from '@chakra-ui/react';
+import { List, ListItem, Flex, Icon, Text, Progress } from '@chakra-ui/react';
 import { MdAdd } from 'react-icons/md';
 import SearchUserModal from '../../common/ChannelMembersModal';
 import { capitalize } from '../../../utils/helper';
 
-function DirectMessage({ directMessages, retrieveMessages, handleItemClick, selectedItem }) {
+function DirectMessage({ directMessages, retrieveMessages, handleItemClick, selectedItem, dmLoading }) {
 
     const handleSelectedUser = (user) => {
       handleItemClick(user)
@@ -13,6 +13,7 @@ function DirectMessage({ directMessages, retrieveMessages, handleItemClick, sele
 
     return (
       <>
+      {dmLoading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
         <List spacing={3}>
           {directMessages.map((dm) => (
             <ListItem 
