@@ -25,6 +25,9 @@ function MessageHeader({ users, dmUsers, receiver = {}, channelDetail, retrieveM
 
     useEffect(() => {
         const members = getChannelMembers(channelDetail, users);
+
+        console.log(members);
+        console.log(channelDetail);
         setChannelMembers(members);
         setIsChannel(true);
     }, [channelDetail])
