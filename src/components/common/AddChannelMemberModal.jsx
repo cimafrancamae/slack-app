@@ -27,11 +27,11 @@ import { capitalize, flattenArray } from '../../utils/helper';
 import useFetch from '../../utils/hooks/useFetch';
 import { addChannelMember } from '../../services/api';
 
-const AddChannelMemberModal = ({ users, channel, members, isOpen, onClose, retrieveChannelData }) => {
+const AddChannelMemberModal = ({ users, channel, members, isOpen, onClose, retrieveChannelMembers }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
 
-    const { data, error, load, fetchData } = useFetch();
+    const { fetchData } = useFetch();
 
     const toast = useToast();
 
@@ -59,21 +59,27 @@ const AddChannelMemberModal = ({ users, channel, members, isOpen, onClose, retri
     };
 
     const handleSubmit = () => {
-        selectedUsers.forEach(user => {
-            const requestBody = {
-                id: channel.id,
-                member_id: user.id
-            };
-
-            const { apiUrl, options } = addChannelMember(requestBody);
-            fetchData(apiUrl, options);
-        });
-        console.log(channel.id)
-        retrieveChannelData(channel.id);
-    }
-
-    useEffect(() => {
-        if(error){
+        try {
+            selectedUsers.forEach(user => {
+                const requestBody = {
+                    id: channel.id,
+                    member_id: user.id
+                };
+    
+                const { apiUrl, options } = addChannelMember(requestBody);
+                fetchData(apiUrl, options);
+            });
+            toast({
+                title: 'Members added to channel',
+                status: 'success',
+                position: 'top',
+                duration: 5000,
+                isClosable: true
+            });
+            setSelectedUsers([]);
+            retrieveChannelMembers(selectedUsers);
+            onClose();
+        } catch (error) {
             console.error('Error adding members', error);
             toast({
                 title: 'Failed to add members',
@@ -83,17 +89,8 @@ const AddChannelMemberModal = ({ users, channel, members, isOpen, onClose, retri
                 isClosable: true
             });
         }
-        if(data){
-            toast({
-                title: 'Members added to channel',
-                status: 'success',
-                position: 'top',
-                duration: 5000,
-                isClosable: true
-            });
-            setSelectedUsers([]);
-        }
-    }, [data, error, load])
+
+    };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>

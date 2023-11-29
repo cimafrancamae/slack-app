@@ -4,11 +4,10 @@ import { MdAdd } from 'react-icons/md';
 import SearchUserModal from '../../common/ChannelMembersModal';
 import { capitalize } from '../../../utils/helper';
 
-function DirectMessage({ directMessages, retrieveMessages, handleItemClick, selectedItem, dmLoading }) {
+function DirectMessage({ directMessages, handleItemClick, selectedItem, dmLoading }) {
 
     const handleSelectedUser = (user) => {
       handleItemClick(user)
-      retrieveMessages(user);
     }
 
     return (

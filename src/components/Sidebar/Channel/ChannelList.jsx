@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { List, ListItem, Flex, Icon, Text } from '@chakra-ui/react';
-import { MdAdd } from 'react-icons/md';
-import { fetchMessage, headers, url } from '../../../services/api';
-import useFetch from '../../../utils/hooks/useFetch';
-import CreateChannelModal from '../../common/CreateChannelModal';
+import { List, ListItem, Text } from '@chakra-ui/react';
 
-function Channel({ channels, retrieveMessages, handleItemClick, selectedItem }) {
+function Channel({ channels, handleItemClick, selectedItem }) {
 
   const receiverClass = 'Channel';
 
   // For selecting an item in the channel list
   const handleClick = (channel) => {
-
-    handleItemClick(channel);
-
     const messageReceiver = { ...channel, class: receiverClass}
-    retrieveMessages(messageReceiver);
+    handleItemClick(messageReceiver);
   }
 
   return (

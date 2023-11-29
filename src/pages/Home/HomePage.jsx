@@ -45,26 +45,57 @@ function HomePage() {
       fetchChannelDetail(apiUrl, options);
     }
 
+    const retrieveChannels = (channel) => {
+      setChannels((prevState) => [
+        ...prevState,
+        { id: channel.id, name: channel.name }
+      ]);
+
+      retrieveChannelData(channel.id);
+    }
+
+    const switchConvo = (receiver) => {
+      console.log(receiver)
+      setMessageReceiver(receiver);
+    }
+
     // Retrieve messages from specific users or channels
     const retrieveMessages = (receiver) => {   
-
-      setMessages([]);
+      if(!receiver) setMessages([]);
       setMessageReceiver(receiver);
-      
       if(receiver){
-        if(receiver.class === 'Channel'){
-          retrieveChannelData(receiver.id)
-        }
         const { apiUrl, options } = fetchMessage(receiver.id, receiver.class);
         fetchMessages(apiUrl, options);
       } 
     }
 
+    // Listens to new messages
+    useEffect(() => {
+      console.log(messageReceiver)
+      
+      const fetchRetrieveMessages = async () => {
+        if(messageReceiver){
+          try {
+            const { apiUrl, options } = fetchMessage(messageReceiver.id, messageReceiver.class);
+            await fetchMessages(apiUrl, options);
+          } catch (error) {
+            console.log('Error fetching messages', error)
+          }
+        }
+      }
+
+      const intervalId = setInterval(() => {
+        fetchRetrieveMessages();
+      }, 3000);
+
+      return () => { clearInterval(intervalId)}
+    }, [messageReceiver])
+
     // For initial load of all users and channels
     useEffect(() => {
       fetchUsers(userUrl, userOptions);
       fetchChannels(userChannelUrl, userChannelOptions);
-    }, [userUrl, userChannelUrl]);
+    },[userUrl, userChannelUrl]);
 
     // For fetch all users response
     useEffect(() => {
@@ -172,7 +203,7 @@ function HomePage() {
       fetchData();
     }, [dmUsers]);
 
-    // For fetch specific channel details response
+    // For fetching specific channel details response
     useEffect(() => {
       if(channelError){
         console.error('Error fetching channel detail', channelError)
@@ -202,12 +233,6 @@ function HomePage() {
       }
       if(messagesData){
         setMessages(messagesData.data.map(message => message));
-        setLoading(messagesLoading);
-      } else {
-        setMessages([]);
-      }
-      if(messagesLoading){
-        setLoading(messagesLoading);
       }
     }, [messagesData, messagesError, messagesLoading, toast]);
 
@@ -222,8 +247,10 @@ function HomePage() {
                   channels={channels}
                   directMessages={directMessages}
                   retrieveMessages={retrieveMessages} 
+                  retrieveChannels={retrieveChannels}
                   users={userData}
                   dmLoading={dmLoading}
+                  switchConvo={switchConvo}
                 />
                 <MessageContainer 
                   messageReceiver={messageReceiver} 
@@ -231,7 +258,6 @@ function HomePage() {
                   users={userData}
                   dmUsers={dmUsers}
                   channelDetail={channel}
-                  retrieveChannelData={retrieveChannelData}
                   retrieveMessages={retrieveMessages}
                 />
             </Flex>
