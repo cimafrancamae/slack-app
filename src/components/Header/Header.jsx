@@ -15,11 +15,14 @@ const Header = ({ signedInUser }) => {
 
   return (
     <Flex 
+      backgroundColor='white'
       justify="space-between" 
       align="center" 
       paddingY="2"
       paddingX="4" 
       boxShadow="md"
+      borderTopLeftRadius='5px'
+      borderTopRightRadius='5px'
     >
       <div>
         <img src={logo} className='header-logo' title='logo' />

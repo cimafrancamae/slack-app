@@ -80,23 +80,26 @@ const LoginPage = () => {
     <div className="login-container">
         {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
         <Box 
-          w="100%" 
+          // w="100%" 
           m="auto" 
-          maxW="500px" 
-          mt="10" 
           textAlign="center"
+          backgroundColor='white'
+          p={10}
+          borderRadius={5}
+          boxShadow='lg'
         >
         <Flex 
           align="center" 
           justify="center" 
           direction="column" 
-          gap="10"
         >
           <Image 
             src={logo} 
             alt="Slack App Logo" 
-            mb="4" 
-            maxW="100px" 
+            mb="2" 
+            maxW="100px"
+            width='85px'
+            height='auto' 
           />
           <Heading as="h2" size="lg" mb="4">
               Login

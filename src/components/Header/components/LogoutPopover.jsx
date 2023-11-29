@@ -14,20 +14,11 @@ function LogoutPopover({ signedInUser, handlePopOver }) {
 
     const navigate = useNavigate();
 
-    // Logout
     const handleLogout = () => {
         localStorage.clear();
         navigate('/');
         handlePopOver();
     };
-
-    const handleDarkMode = () => {
-
-    }
-
-    const handleProfile = () => {
-
-    }
     
     return (
         <>
@@ -48,24 +39,6 @@ function LogoutPopover({ signedInUser, handlePopOver }) {
                     justifyContent="center"
                     alignItems="flex-start"
                 >
-                    <MenuButton 
-                        as={Button} 
-                        variant="ghost" 
-                        w="100%" 
-                        textAlign="left" 
-                        onClick={handleProfile}
-                    >
-                        Profile
-                    </MenuButton>
-                    <MenuButton 
-                        as={Button} 
-                        variant="ghost" 
-                        w="100%" 
-                        textAlign="left" 
-                        onClick={handleDarkMode}
-                    >
-                        Dark Mode
-                    </MenuButton>
                     <MenuButton 
                         as={Button} 
                         variant="ghost" 

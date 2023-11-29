@@ -25,10 +25,9 @@ function MessageHeader({ users, dmUsers, receiver = {}, channelDetail, retrieveM
 
     useEffect(() => {
         const members = getChannelMembers(channelDetail, users);
-
-        console.log(members);
-        console.log(channelDetail);
-        setChannelMembers(members);
+        if(members){
+            setChannelMembers(members);
+        }
         setIsChannel(true);
     }, [channelDetail])
 
@@ -57,9 +56,16 @@ function MessageHeader({ users, dmUsers, receiver = {}, channelDetail, retrieveM
                     alignItems="center" 
                     minH="40px"
                 >
-                    <Text fontSize="md" fontWeight="bold">
-                        { title }
-                    </Text>
+                    <Box>
+                        <Flex gap={2} alignItems='center'>
+                            {(receiver && receiver.class === 'User') && (
+                                <Avatar name={receiver.name} borderRadius={5} size='xs' />
+                            )}
+                            <Text fontSize="md" fontWeight="bold">
+                                { title }
+                            </Text>
+                        </Flex>
+                    </Box>
                     {isChannel && (
                         <>
                             <Tooltip 

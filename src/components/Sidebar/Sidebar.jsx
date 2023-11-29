@@ -5,15 +5,14 @@ import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import CreateChannelModal from '../common/CreateChannelModal';
 
-const Sidebar = ({ channels, directMessages, retrieveMessages, retrieveChannels, users, dmLoading, switchConvo }) => {
+const Sidebar = ({ channels, directMessages, retrieveMessages, retrieveChannels, users, dmLoading, switchConvo, selectedItem }) => {
   
-  const [selectedItem, setSelectedItem] = useState(null);
+  // const [selectedItem, setSelectedItem] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const defaultIndexes = [0,1];
 
   // Returns the selected item in sidebar
   const handleItemClick = (item) => {
-    setSelectedItem(item);
     retrieveMessages(item)
     switchConvo(item);
   };
@@ -26,7 +25,6 @@ const Sidebar = ({ channels, directMessages, retrieveMessages, retrieveChannels,
 
   // For new direct message or channel
   const handleNewMessage = () => {
-    setSelectedItem(null);
     retrieveMessages(null);
   }
 
@@ -45,6 +43,7 @@ const Sidebar = ({ channels, directMessages, retrieveMessages, retrieveChannels,
         borderColor="gray.300"
         boxShadow="md"
         overflowY="auto"
+        borderBottomLeftRadius='5px'
       >
         <Accordion 
           defaultIndex={defaultIndexes} 

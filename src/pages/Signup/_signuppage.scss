@@ -5,8 +5,12 @@
     width: 100%;
     height: auto;
     min-height: 100vh;
+    min-width: 100vw;
     padding-top: 5rem;
-    // padding-bottom: 2rem;
+    background-image: url('../../../public/chat\ bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 
     a {
         color: #C53030;
