@@ -1,18 +1,22 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Icon, Text } from '@chakra-ui/react';
 import ChannelList from './Channel/ChannelList';
 import DirectMessageList from './DirectMessage/DirectMessageList';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import CreateChannelModal from '../common/CreateChannelModal';
 
-const Sidebar = ({ channels, directMessages, retrieveMessages, users, dmLoading }) => {
+const Sidebar = ({ channels, directMessages, retrieveMessages, retrieveChannels, users, dmLoading, switchConvo }) => {
   
   const [selectedItem, setSelectedItem] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [defaultIndexes, setDefaultIndexes] = useState([0,1]);
+  const defaultIndexes = [0,1];
 
   // Returns the selected item in sidebar
-  const handleItemClick = (item) => setSelectedItem(item);
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    retrieveMessages(item)
+    switchConvo(item);
+  };
 
   // For create channel modal
   const handleCreateChannel = () => {
@@ -65,7 +69,6 @@ const Sidebar = ({ channels, directMessages, retrieveMessages, users, dmLoading 
             <AccordionPanel pb={4}>
               <ChannelList 
                 channels={channels} 
-                retrieveMessages={retrieveMessages}
                 handleItemClick={handleItemClick}
                 selectedItem={selectedItem}
               />
@@ -90,7 +93,6 @@ const Sidebar = ({ channels, directMessages, retrieveMessages, users, dmLoading 
             <AccordionPanel pb={4}>
               <DirectMessageList 
                 directMessages={directMessages}
-                retrieveMessages={retrieveMessages}
                 handleItemClick={handleItemClick} 
                 selectedItem={selectedItem}
                 dmLoading={dmLoading}
@@ -105,6 +107,8 @@ const Sidebar = ({ channels, directMessages, retrieveMessages, users, dmLoading 
               onClose={onClose} 
               users={users}
               retrieveMessages={retrieveMessages}
+              retrieveChannels={retrieveChannels}
+              handleItemClick={handleItemClick}
             />
           )}
     </div>

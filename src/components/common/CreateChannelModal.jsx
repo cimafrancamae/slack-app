@@ -5,13 +5,13 @@ import { capitalize, flattenArray } from '../../utils/helper';
 import useFetch from '../../utils/hooks/useFetch';
 import { createChannel } from '../../services/api';
 
-function CreateChannelModal({ isOpen, onClose, users, retrieveMessages }) {
+function CreateChannelModal({ isOpen, onClose, users, retrieveMessages, retrieveChannels, handleItemClick }) {
 
     const [channelName, setChanneName] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
 
-    const { data, error, load, fetchData } = useFetch();
+    const { data, fetchData } = useFetch();
 
     const toast = useToast();
 
@@ -41,23 +41,23 @@ function CreateChannelModal({ isOpen, onClose, users, retrieveMessages }) {
             name: channelName,
             user_ids: selectedUsers.map(user => user.id)
         };
-        console.log(requestBody)
         const { apiUrl, options } = createChannel(requestBody);
         fetchData(apiUrl, options);
     }
 
     useEffect(() => {
-        if(error){
-            console.error('Failed to create a channel', error);
+        if(data && data.errors){
+            console.error('Failed to create a channel', data.errors);
+            const error = data.errors[0];
             toast({
-                title: 'Failed to create a channel',
+                title: `Failed to create a channel. ${error}.`,
                 status: 'error',
                 position: 'top',
                 duration: 5000,
                 isClosable: true
             })
         }
-        if(data){
+        if(data && data.data){
             toast({
                 title: 'New channel was created',
                 status: 'success',
@@ -65,11 +65,14 @@ function CreateChannelModal({ isOpen, onClose, users, retrieveMessages }) {
                 duration: 5000,
                 isClosable: true
             })
-            const channelData = data.data;
+            const channelData = {id: data.data.id, name: data.data.name, class: 'Channel'};
+
+            retrieveChannels(channelData);
             retrieveMessages(channelData);
+            handleItemClick(channelData);
             onClose();
         }
-    }, [data, error, load, retrieveMessages, toast])
+    }, [data, retrieveMessages, retrieveChannels, handleItemClick, onClose, toast])
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>

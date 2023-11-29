@@ -48,6 +48,7 @@ input {
 }
 
 body {
+  background-color: rgb(107, 103, 103);
   display: flex;
   justify-content: center;
   align-items: center;

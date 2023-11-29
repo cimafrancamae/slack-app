@@ -10,13 +10,6 @@ const MessageDisplay = ({ messages }) => {
 
   const userId = localStorage.getItem('id');
   const containerRef = useRef(null);
-  let isUser = false;
-
-  const msgStyles = {
-    backgroundColor: isUser ? '#DCF8C6' : '#EAEAEA',
-    marginLeft: isUser ? 'auto' : '0',
-    marginRight: isUser ? '0' : 'auto',
-  }
 
   useEffect(() => {
     if(containerRef.current){

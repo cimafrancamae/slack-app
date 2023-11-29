@@ -5,7 +5,7 @@ import { capitalize, getChannelMembers, getUserInfo } from '../../../utils/helpe
 import SearchUserModal from '../../common/ChannelMembersModal';
 import ChannelMembersModal from '../../common/ChannelMembersModal';
 
-function MessageHeader({ users, dmUsers, receiver = {}, channelDetail, retrieveChannelData, retrieveMessages }) {
+function MessageHeader({ users, dmUsers, receiver = {}, channelDetail, retrieveMessages }) {
 
     const [title, setTitle] = useState('');
     const [channelMembers, setChannelMembers] = useState([]);
@@ -15,6 +15,13 @@ function MessageHeader({ users, dmUsers, receiver = {}, channelDetail, retrieveC
     const onClose = () => setIsOpen(false);
 
     const onMembersClick = () => setIsOpen(true);
+
+    const retrieveChannelMembers = (newMembers) => {
+        setChannelMembers((prevState) => [
+            ...prevState,
+            ...newMembers
+        ])
+    };
 
     useEffect(() => {
         const members = getChannelMembers(channelDetail, users);
@@ -78,8 +85,8 @@ function MessageHeader({ users, dmUsers, receiver = {}, channelDetail, retrieveC
                                     isOpen={isOpen}
                                     onClose={onClose}
                                     users={users}
-                                    retrieveChannelData={retrieveChannelData}
                                     retrieveMessages={retrieveMessages}
+                                    retrieveChannelMembers={retrieveChannelMembers}
                                 />
                             )}
                         </>

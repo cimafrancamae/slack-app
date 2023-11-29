@@ -5,7 +5,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { MdPersonAdd } from 'react-icons/md';
 import AddChannelMemberModal from './AddChannelMemberModal';
 
-const ChannelMembersModal = ({ channel, members, isOpen, onClose, users, retrieveChannelData, retrieveMessages }) => {
+const ChannelMembersModal = ({ channel, members, isOpen, onClose, users, retrieveMessages, retrieveChannelMembers }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [addMember, setAddMember] = useState(false);
@@ -76,7 +76,7 @@ const ChannelMembersModal = ({ channel, members, isOpen, onClose, users, retriev
                   members={members}
                   isOpen={isOpen}
                   onClose={onAddMemberClose} 
-                  retrieveChannelData={retrieveChannelData}
+                  retrieveChannelMembers={retrieveChannelMembers}
                 />
               )}
               {filteredMembers.map((member) => (

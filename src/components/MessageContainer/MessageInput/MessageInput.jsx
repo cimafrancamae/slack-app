@@ -4,7 +4,7 @@ import { MdSend } from 'react-icons/md';
 import useFetch from '../../../utils/hooks/useFetch';
 import { sendMessage } from '../../../services/api';
 
-const MessageInput = ({ receiver = {}, onSendMessage }) => {
+const MessageInput = ({ receiver = {}, retrieveMessages }) => {
 
   const { data, error, load, fetchData } = useFetch()
   const [message, setMessage] = useState('');
@@ -19,13 +19,11 @@ const MessageInput = ({ receiver = {}, onSendMessage }) => {
     if(e.key === 'Enter'){
       e.preventDefault();
       if (message.trim() !== '') {
-  
         const requestBody = {
           receiver_id: receiver.id,
           receiver_class: receiver.class,
           body: message
         }
-  
         const { apiUrl, options } = sendMessage(requestBody);
         fetchData(apiUrl,options);
       }
@@ -43,7 +41,7 @@ const MessageInput = ({ receiver = {}, onSendMessage }) => {
       });
     } 
     if(data){
-      onSendMessage(receiver);
+      retrieveMessages(receiver);
       setMessage('');
     }
 
