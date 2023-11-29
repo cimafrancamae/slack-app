@@ -23,6 +23,7 @@ function HomePage() {
     const [directMessages, setDirectMessages] = useState([]);
     const [dmLoading, setDmLoading] = useState(true);
     const [channels, setChannels] = useState([]);
+    const [toScroll, setToScroll] = useState(true);
 
     const { apiUrl: userUrl, options: userOptions } = fetchAllUsers();
     const { apiUrl: userChannelUrl, options: userChannelOptions } = fetchUserChannels();
@@ -55,8 +56,8 @@ function HomePage() {
     }
 
     const switchConvo = (receiver) => {
-      console.log(receiver)
       setMessageReceiver(receiver);
+      setToScroll(false)
     }
 
     // Retrieve messages from specific users or channels
@@ -64,6 +65,9 @@ function HomePage() {
       if(!receiver) setMessages([]);
       setMessageReceiver(receiver);
       if(receiver){
+        if(receiver.class === 'Channel'){
+          retrieveChannelData(receiver.id)
+        }
         const { apiUrl, options } = fetchMessage(receiver.id, receiver.class);
         fetchMessages(apiUrl, options);
       } 
@@ -71,13 +75,13 @@ function HomePage() {
 
     // Listens to new messages
     useEffect(() => {
-      console.log(messageReceiver)
       
       const fetchRetrieveMessages = async () => {
         if(messageReceiver){
           try {
             const { apiUrl, options } = fetchMessage(messageReceiver.id, messageReceiver.class);
             await fetchMessages(apiUrl, options);
+            // setToScroll(true);
           } catch (error) {
             console.log('Error fetching messages', error)
           }
@@ -259,6 +263,7 @@ function HomePage() {
                   dmUsers={dmUsers}
                   channelDetail={channel}
                   retrieveMessages={retrieveMessages}
+                  toScroll={toScroll}
                 />
             </Flex>
         </div>

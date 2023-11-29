@@ -9,7 +9,7 @@ import { Toast, useToast } from '@chakra-ui/react';
 import MessageDisplay from './MessageDisplay/MessageDisplay';
 
 
-function MessageContainer({ messages, users, dmUsers, messageReceiver = {}, channelDetail, channelMembers, retrieveMessages }) {
+function MessageContainer({ messages, users, dmUsers, messageReceiver = {}, channelDetail, retrieveMessages, toScroll }) {
 
     return (
         <>
@@ -27,12 +27,12 @@ function MessageContainer({ messages, users, dmUsers, messageReceiver = {}, chan
                       dmUsers={dmUsers}
                       receiver={messageReceiver} 
                       channelDetail={channelDetail}
-                      channelMembers={channelMembers}
+                    //   channelMembers={channelMembers}
                       retrieveMessages={retrieveMessages}
                     />
                 </Box>
                 <Box flex="1"  overflowY="auto" alignItems="flex-end">
-                    <MessageDisplay messages={messages} />
+                    <MessageDisplay messages={messages} toScroll={toScroll} />
                 </Box>
                     <MessageInput 
                         receiver={messageReceiver} 

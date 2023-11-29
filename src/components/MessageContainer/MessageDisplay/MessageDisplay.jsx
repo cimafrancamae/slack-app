@@ -6,13 +6,15 @@ import useFetch from '../../../utils/hooks/useFetch';
 import { capitalize } from '../../../utils/helper';
 import chatBg from '../../../../public/chat bg.jpg';
 
-const MessageDisplay = ({ messages }) => {
+const MessageDisplay = ({ messages, toScroll }) => {
 
   const userId = localStorage.getItem('id');
   const containerRef = useRef(null);
 
+  console.log(toScroll);
+
   useEffect(() => {
-    if(containerRef.current){
+    if(containerRef.current && !toScroll){
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
   }, [messages])
