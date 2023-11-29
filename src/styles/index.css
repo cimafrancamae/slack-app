@@ -84,7 +84,7 @@ body {
   min-width: 100vw;
   min-height: 100vh;
   padding-top: 5rem;
-  background-image: url("../../../public/chat bg.jpg");
+  background-image: url("../../../public/chat-bg.jpg");
   background-size: cover;
 }
 .login-container a {
