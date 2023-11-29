@@ -18,6 +18,15 @@ const MessageInput = ({ receiver = {}, retrieveMessages }) => {
   const handleSubmit = (e) => {
     if(e.key === 'Enter'){
       e.preventDefault();
+      if(!receiver){
+        toast({
+          title: 'Who would you like to talk to? Choose a message receiver. ',
+          status: 'warning',
+          position: 'top',
+          duration: 5000,
+          isClosable: true
+        })
+      }
       if (message.trim() !== '') {
         const requestBody = {
           receiver_id: receiver.id,
@@ -26,6 +35,14 @@ const MessageInput = ({ receiver = {}, retrieveMessages }) => {
         }
         const { apiUrl, options } = sendMessage(requestBody);
         fetchData(apiUrl,options);
+      } else {
+        toast({
+          title: 'No message to send. Type something...',
+          status: 'warning',
+          position: 'top',
+          duration: 5000,
+          isClosable: true
+        })
       }
     }
   };
@@ -58,6 +75,7 @@ const MessageInput = ({ receiver = {}, retrieveMessages }) => {
           flex="1"
           h="4rem"
           borderColor="gray.300"
+          backgroundColor="white"
         />
         <InputRightElement color='gray.500' padding={1} h="4rem">
           <MdSend size={50}  />

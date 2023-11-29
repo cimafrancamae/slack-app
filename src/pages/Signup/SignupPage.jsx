@@ -77,7 +77,7 @@ const SignupPage = () => {
         });
         setLoading(false);
         console.error('Registration error:', error.message);
-        showAlert('Registration failed! Please try again.', 'error');
+        showAlert(`${error.message}`, 'error');
     }
   };
 
@@ -92,20 +92,23 @@ const SignupPage = () => {
           w="100%" 
           m="auto" 
           maxW="500px" 
-          mt="10" 
           textAlign="center"
+          backgroundColor='white'
+          p={5}
+          borderRadius={5}
+          boxShadow='lg'
         >
         <Flex 
           align="center" 
           justify="center" 
           direction="column" 
-          gap="10"
         >
           <Image 
             src={logo} 
             alt="Slack App Logo" 
             mb="4" 
             maxW="100px" 
+            width='80px'
           />
           <Heading as="h2" size="lg" mb="4">
               Sign Up

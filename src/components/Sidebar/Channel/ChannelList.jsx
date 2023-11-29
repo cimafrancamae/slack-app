@@ -17,6 +17,7 @@ function Channel({ channels, handleItemClick, selectedItem }) {
             key={channel.id} 
             cursor='pointer' 
             _hover={{ bgColor: 'gray.100' }}
+            fontSize='sm'
             borderRadius={5}
             onClick={() => handleClick(channel)}
             bg={selectedItem && selectedItem.id === channel.id ? 'gray.100' : 'transparent'}

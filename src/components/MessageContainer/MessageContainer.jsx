@@ -7,19 +7,21 @@ import useFetch from '../../utils/hooks/useFetch';
 import { fetchMessage, sendMessage } from '../../services/api';
 import { Toast, useToast } from '@chakra-ui/react';
 import MessageDisplay from './MessageDisplay/MessageDisplay';
-
+import chatBg from '../../../public/chat bg.jpg';
 
 function MessageContainer({ messages, users, dmUsers, messageReceiver = {}, channelDetail, retrieveMessages, toScroll }) {
 
     return (
         <>
             <Box 
+                bgImage={chatBg}
+                bgSize='cover'
                 flex="1" 
                 display="flex" 
                 flexDirection="column"
-                bg="gray.50"
                 boxShadow="md"
                 maxH='84vh'
+                borderBottomRightRadius='5px'
             >
                 <Box>
                     <MessageHeader 
@@ -27,12 +29,11 @@ function MessageContainer({ messages, users, dmUsers, messageReceiver = {}, chan
                       dmUsers={dmUsers}
                       receiver={messageReceiver} 
                       channelDetail={channelDetail}
-                    //   channelMembers={channelMembers}
                       retrieveMessages={retrieveMessages}
                     />
                 </Box>
                 <Box flex="1"  overflowY="auto" alignItems="flex-end">
-                    <MessageDisplay messages={messages} toScroll={toScroll} />
+                    <MessageDisplay messages={messages} receiver={messageReceiver} toScroll={toScroll} />
                 </Box>
                     <MessageInput 
                         receiver={messageReceiver} 

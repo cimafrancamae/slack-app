@@ -3,6 +3,9 @@ import { extendTheme } from '@chakra-ui/react';
 const theme = extendTheme({
   styles: {
     global: {
+      'body': {
+        backgroundColor: 'gray.700',
+      },
       '::-webkit-scrollbar': {
         width: '8px',
       },

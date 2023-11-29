@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Header from '../../components/Header/Header';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { Flex } from '@chakra-ui/layout';
+import { Flex, Box } from '@chakra-ui/react';
 import { fetchAllUserChannelDetails, fetchAllUsers, fetchChannel, fetchDirectMessages, fetchMessage, fetchUserChannels } from '../../services/api';
 import { useToast } from '@chakra-ui/react';
 import { Progress } from '@chakra-ui/react';
@@ -24,6 +24,7 @@ function HomePage() {
     const [dmLoading, setDmLoading] = useState(true);
     const [channels, setChannels] = useState([]);
     const [toScroll, setToScroll] = useState(true);
+    const [selectedItem, setSelectedItem] = useState(null);
 
     const { apiUrl: userUrl, options: userOptions } = fetchAllUsers();
     const { apiUrl: userChannelUrl, options: userChannelOptions } = fetchUserChannels();
@@ -57,6 +58,7 @@ function HomePage() {
 
     const switchConvo = (receiver) => {
       setMessageReceiver(receiver);
+      setSelectedItem(receiver);
       setToScroll(false)
     }
 
@@ -64,14 +66,29 @@ function HomePage() {
     const retrieveMessages = (receiver) => {   
       if(!receiver) setMessages([]);
       setMessageReceiver(receiver);
+
       if(receiver){
         if(receiver.class === 'Channel'){
           retrieveChannelData(receiver.id)
+        } else {
+          const dmExists = directMessages.find(dm => dm.id === receiver.id);
+          if(!dmExists) {
+            setDirectMessages(prevState => [
+              ...prevState,
+              receiver
+          ])}
         }
         const { apiUrl, options } = fetchMessage(receiver.id, receiver.class);
         fetchMessages(apiUrl, options);
+        setSelectedItem(receiver);
       } 
+
     }
+
+    useEffect(() => {
+      fetchUsers(userUrl, userOptions);
+      fetchChannels(userChannelUrl, userChannelOptions);
+    }, [userUrl, userChannelUrl])
 
     // Listens to new messages
     useEffect(() => {
@@ -95,13 +112,7 @@ function HomePage() {
       return () => { clearInterval(intervalId)}
     }, [messageReceiver])
 
-    // For initial load of all users and channels
-    useEffect(() => {
-      fetchUsers(userUrl, userOptions);
-      fetchChannels(userChannelUrl, userChannelOptions);
-    },[userUrl, userChannelUrl]);
-
-    // For fetch all users response
+    // For fetching all users response
     useEffect(() => {
       if (userError) {
         console.error('User Error:', userError);
@@ -114,12 +125,12 @@ function HomePage() {
         });
       }
       if (userData) {
-        setLoading(userLoading);
+        // setLoading(userLoading);
         localStorage.setItem('users', JSON.stringify(userData));
       }
     }, [userData, userError, userLoading, toast]);
 
-    // For fetch all channels response
+    // For fetching all channels response
     useEffect(() => {
       if (userChannelError) {
         console.error('Channel Error:', userChannelError);
@@ -132,7 +143,6 @@ function HomePage() {
         });
       }
       if (userChannelData) {
-        setLoading(userChannelLoading);
 
         // Define channels to display on sidebar
         if (userChannelData && Array.isArray(userChannelData.data)) {
@@ -164,10 +174,16 @@ function HomePage() {
     useEffect(() => {
       let members = [];
       if(channelDetails){
-        channelDetails.forEach(channel => {
-          const channelMembers = getChannelMembers(channel.data, userData);
-          members.push(channelMembers);
-        });
+        try {
+          channelDetails.forEach(channel => {
+            if(channel.data){
+              const channelMembers = getChannelMembers(channel.data, userData);
+              members.push(channelMembers);
+            }
+          });
+        } catch (error) {
+          console.error ('Failed to Retrieve channel members',error);
+        }
       }
       const users = getDmUsers(members);
       setDmUsers(users);
@@ -197,6 +213,7 @@ function HomePage() {
               });
               setDirectMessages(dm);
             }
+            // setDmLoading(false)
           } catch (error) {
             console.error('Failed to retrieve direct messages');
           }finally {
@@ -205,6 +222,7 @@ function HomePage() {
         } 
       }
       fetchData();
+      setDmLoading(false)
     }, [dmUsers]);
 
     // For fetching specific channel details response
@@ -215,14 +233,10 @@ function HomePage() {
       if(channelData){
         const data = channelData.data
         setChannel(data);
-        setLoading(channelLoading)
-      }
-      if(channelLoading){
-        setLoading(channelLoading);
       }
     }, [channelData, channelError, channelLoading]);
 
-    // For fetch messages response
+    // For fetching messages response
     useEffect(() => {
       if(messagesError){
         console.log('error', messagesError);
@@ -245,7 +259,8 @@ function HomePage() {
           <div className="progress-container">
             {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
           </div>
-            <Header signedInUser={signedInUser} />
+          <Box borderRadius={5}>
+            <Header signedInUser={signedInUser}  />
             <Flex  maxH='50%'>
                 <Sidebar 
                   channels={channels}
@@ -255,6 +270,7 @@ function HomePage() {
                   users={userData}
                   dmLoading={dmLoading}
                   switchConvo={switchConvo}
+                  selectedItem={selectedItem}
                 />
                 <MessageContainer 
                   messageReceiver={messageReceiver} 
@@ -266,6 +282,7 @@ function HomePage() {
                   toScroll={toScroll}
                 />
             </Flex>
+          </Box>
         </div>
     );
 }

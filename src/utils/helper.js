@@ -8,6 +8,18 @@ export function removeDuplicates(arr) {
     return [...new Set(arr)];
 }
 
+export function moveSelectedItemToTop (array, selectedItem) {
+    if ( selectedItem === null ) return array; 
+  
+    const selected = array.filter(arr => arr.id === selectedItem.id); 
+    const newArray = [...array]; 
+  
+    newArray.splice(selectedItem, 1); 
+    newArray.shift(selected); 
+  
+    return newArray;
+}
+
 export function capitalize(string) {
     return string.charAt(0).toUpperCase().concat(string.slice(1));
 }
@@ -40,9 +52,14 @@ export function getChannelMembers (channelDetail, users) {
 }
 
 export function getDmUsers(users) {
-    const flattenedUsers = flattenArray(users);
-    const dmUsers = removeDuplicates(flattenedUsers);
-    localStorage.setItem('dm-users', JSON.stringify(dmUsers));
+    if(!users) return [];
 
-    return dmUsers;
+    try {
+        const flattenedUsers = flattenArray(users);
+        const dmUsers = removeDuplicates(flattenedUsers);
+        localStorage.setItem('dm-users', JSON.stringify(dmUsers));
+        return dmUsers;
+    } catch (error){
+        console.error('Failed to Retrieve DM Users', error);
+    }
 }
