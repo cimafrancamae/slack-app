@@ -76,39 +76,6 @@ body {
   padding: 5px 25px 5px 10px;
 }
 
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  min-width: 100vw;
-  min-height: 100vh;
-  padding-top: 5rem;
-  background-image: url("../../../public/chat-bg.jpg");
-  background-size: cover;
-}
-.login-container a {
-  color: #C53030;
-}
-
-.signup-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: auto;
-  min-height: 100vh;
-  min-width: 100vw;
-  padding-top: 5rem;
-  background-image: url("../../../public/chat bg.jpg");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
-.signup-container a {
-  color: #C53030;
-}
-
 .home-container {
   width: 90vw;
   height: 90vh;
