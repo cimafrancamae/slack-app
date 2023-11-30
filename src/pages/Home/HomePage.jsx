@@ -41,12 +41,18 @@ function HomePage() {
       { id: 2, name: 'random' },
     ];
     
-    // Check for channel updates 
+    // Retrieve all channels
+    const refreshChannels = () => {
+      console.log('here')
+      fetchChannels(userChannelUrl, userChannelOptions);
+    }
+    // Check for specific channel updates 
     const retrieveChannelData = (id) => {
       const { apiUrl, options } = fetchChannel(id);
       fetchChannelDetail(apiUrl, options);
     }
 
+    // Update sidebar channelList
     const retrieveChannels = (channel) => {
       setChannels((prevState) => [
         ...prevState,
@@ -56,6 +62,7 @@ function HomePage() {
       retrieveChannelData(channel.id);
     }
 
+    // Check selected item in sidebar
     const switchConvo = (receiver) => {
       setMessageReceiver(receiver);
       setSelectedItem(receiver);
@@ -85,9 +92,10 @@ function HomePage() {
 
     }
 
+    // Load all users and channels
     useEffect(() => {
       fetchUsers(userUrl, userOptions);
-      fetchChannels(userChannelUrl, userChannelOptions);
+      refreshChannels();
     }, [userUrl, userChannelUrl])
 
     // Listens to new messages
@@ -271,6 +279,7 @@ function HomePage() {
                   dmLoading={dmLoading}
                   switchConvo={switchConvo}
                   selectedItem={selectedItem}
+                  refreshChannels={refreshChannels}
                 />
                 <MessageContainer 
                   messageReceiver={messageReceiver} 

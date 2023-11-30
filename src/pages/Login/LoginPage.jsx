@@ -79,7 +79,12 @@ const LoginPage = () => {
   };
 
   return (
-      <Flex width='100vw' height='100vh' backgroundImage={bgImage} backgroundSize='cover'>
+      <Flex 
+        width='100vw' 
+        height='100vh' 
+        backgroundImage={bgImage} 
+        backgroundSize='cover'
+      >
           {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
           <Box 
             m="auto" 

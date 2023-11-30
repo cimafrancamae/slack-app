@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import CreateChannelModal from '../common/CreateChannelModal';
 
-const Sidebar = ({ channels, directMessages, retrieveMessages, retrieveChannels, users, dmLoading, switchConvo, selectedItem }) => {
-  
+const Sidebar = ({ channels, directMessages, retrieveMessages, retrieveChannels, users, dmLoading, switchConvo, selectedItem, refreshChannels }) => {
+
   // const [selectedItem, setSelectedItem] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const defaultIndexes = [0,1];
@@ -52,7 +52,7 @@ const Sidebar = ({ channels, directMessages, retrieveMessages, retrieveChannels,
           <AccordionItem>
             <h2>
               <Flex align="center" justify="space-between">
-                <AccordionButton>
+                <AccordionButton onClick={refreshChannels}>
                   <AccordionIcon />
                   <Text fontWeight="bold">Channels</Text>
                 </AccordionButton>
