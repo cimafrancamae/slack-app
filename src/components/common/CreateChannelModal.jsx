@@ -77,7 +77,7 @@ function CreateChannelModal({ isOpen, onClose, users, retrieveMessages, retrieve
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent bg="gray.300" w="100%" >
+            <ModalContent bg="gray.400" w="100%" border='1px solid' borderColor='gray.100' >
                 <ModalHeader>
                     Create a channel
                 </ModalHeader>

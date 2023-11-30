@@ -16,6 +16,7 @@ import {
 import { createUser } from '../../services/api'; 
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../public/slack-with-name-logo.png';
+import bgImage from '../../../public/chat-bg.jpg';
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({
@@ -86,17 +87,27 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="signup-container">
+      <Flex 
+        minW='100vw' 
+        minH='100vh'
+        h='auto' 
+        backgroundImage={bgImage} 
+        backgroundSize='cover'
+        backgroundAttachment='fixed'
+        paddingTop='15rem'
+        paddingBottom='5rem'
+      >
         {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
         <Box 
           w="100%" 
+          h="auto"
           m="auto" 
           maxW="500px" 
           textAlign="center"
           backgroundColor='white'
-          p={5}
           borderRadius={5}
           boxShadow='lg'
+          p={5}
         >
         <Flex 
           align="center" 
@@ -180,7 +191,7 @@ const SignupPage = () => {
             </form>
         </Flex>
         </Box>
-    </div>
+        </Flex>
   );
 };
 

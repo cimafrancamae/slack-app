@@ -6,6 +6,9 @@ const theme = extendTheme({
       'body': {
         backgroundColor: 'gray.700',
       },
+      'a': {
+        color: 'red',
+      },
       '::-webkit-scrollbar': {
         width: '8px',
       },

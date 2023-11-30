@@ -17,6 +17,7 @@ import {
 import { loginUser } from '../../services/api';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../../public/slack-with-name-logo.png';
+import bgImage from '../../../public/chat-bg.jpg';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -65,86 +66,91 @@ const LoginPage = () => {
 
             navigate("/home");
         } else {
+          console.log(response)
             throw new Error('Login failed. Invalid response');
         }
     } catch (error) {
         setFormData({ email: '', password: '' });
         setLoading(false);
         console.error('Login error:', error.message);
-        showAlert('Login failed! Please try again.', 'error');
+        showAlert(`${error.message}`, 'error');
     }
 
   };
 
   return (
-    <div className="login-container">
-        {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
-        <Box 
-          // w="100%" 
-          m="auto" 
-          textAlign="center"
-          backgroundColor='white'
-          p={10}
-          borderRadius={5}
-          boxShadow='lg'
-        >
-        <Flex 
-          align="center" 
-          justify="center" 
-          direction="column" 
-        >
-          <Image 
-            src={logo} 
-            alt="Slack App Logo" 
-            mb="2" 
-            maxW="100px"
-            width='85px'
-            height='auto' 
-          />
-          <Heading as="h2" size="lg" mb="4">
-              Login
-          </Heading>
-          { alertMessage && (
-              <Alert status={alertMessage.type} mb={'4'} maxW="400px">
-                  <AlertIcon />
-                  {alertMessage.message}
-              </Alert>
-          )}
-          <form onSubmit={handleSubmit}>
-              <FormControl mb="4">
-              <FormLabel>Email</FormLabel>
-              <Input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="Enter your email"
-                  w="400px"
-              />
-              </FormControl>
-              <FormControl mb="4">
-              <FormLabel>Password</FormLabel>
-              <Input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="Enter your password"
-              />
-              </FormControl>
-              <Button type="submit" colorScheme="blue" mb="4" w="100%">
-                  Login
-              </Button>
-            </form>
-            <Text mb="4">
-            {"Don't have an account? "}
-              <Link to="/register" ml="1">
-                Create one here
-              </Link>
-            </Text>
-        </Flex>
-        </Box>
-    </div>
+      <Flex 
+        width='100vw' 
+        height='100vh' 
+        backgroundImage={bgImage} 
+        backgroundSize='cover'
+      >
+          {loading && <Progress size="xs" isIndeterminate colorScheme='blue' />}
+          <Box 
+            m="auto" 
+            textAlign="center"
+            backgroundColor='white'
+            p={10}
+            borderRadius={5}
+            boxShadow='md'
+          >
+          <Flex 
+            align="center" 
+            justify="center" 
+            direction="column" 
+          >
+            <Image 
+              src={logo} 
+              alt="Slack App Logo" 
+              mb="2" 
+              maxW="100px"
+              width='85px'
+              height='auto' 
+            />
+            <Heading as="h2" size="lg" mb="4">
+                Login
+            </Heading>
+            { alertMessage && (
+                <Alert status={alertMessage.type} mb={'4'} maxW="400px">
+                    <AlertIcon />
+                    {alertMessage.message}
+                </Alert>
+            )}
+            <form onSubmit={handleSubmit}>
+                <FormControl mb="4">
+                <FormLabel>Email</FormLabel>
+                <Input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter your email"
+                    w="400px"
+                />
+                </FormControl>
+                <FormControl mb="4">
+                <FormLabel>Password</FormLabel>
+                <Input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="Enter your password"
+                />
+                </FormControl>
+                <Button type="submit" colorScheme="blue" mb="4" w="100%">
+                    Login
+                </Button>
+              </form>
+              <Text mb="4">
+              {"Don't have an account? "}
+                <Link to="/register" ml="1">
+                  Create one here
+                </Link>
+              </Text>
+          </Flex>
+          </Box>
+      </Flex>
   );
 };
 

@@ -1,6 +1,5 @@
 import useFetch from "../utils/hooks/useFetch";
 import { getChannelMembers, getLastTenUsers } from "../utils/helper";
-import { useEffect, useState } from "react";
 
 export const url = 'http://206.189.91.54/api/v1';
 export const headers = {
