@@ -43,7 +43,6 @@ function HomePage() {
     
     // Retrieve all channels
     const refreshChannels = () => {
-      console.log('here')
       fetchChannels(userChannelUrl, userChannelOptions);
     }
     // Check for specific channel updates 
