@@ -54,11 +54,15 @@ npm run dev
 
 Login Screen
 
+<img width="960" alt="image" src="https://github.com/cimafrancamae/slack-app/assets/65450522/571b0277-a511-47ef-bd16-70eac9e23d41">
 
 Chat Screen
 
+<img width="960" alt="image" src="https://github.com/cimafrancamae/slack-app/assets/65450522/5c9b0963-5163-4b1c-976f-0c20fd17b7c4">
 
 Channel Creation
+
+<img width="960" alt="image" src="https://github.com/cimafrancamae/slack-app/assets/65450522/56f66459-a38a-402d-b11c-e077ba9fafda">
 
 ### Contributing
 Contributions are welcome! Please follow these steps:
