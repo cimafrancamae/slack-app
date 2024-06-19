@@ -18,14 +18,14 @@ A React application where registered users can send and receive messages and cre
 - Responsive design
 
 ## Technologies Used
-React JS
-Vite (for development and build tool)
-SCSS (for styling)
-React Router (for navigation)
-Chakra UI (for UI components)
-React Icons (for icons)
-React Hook (for state management)
-Framer Motion (for animations)
+- React JS
+- Vite (for development and build tool)
+- SCSS (for styling)
+- React Router (for navigation)
+- Chakra UI (for UI components)
+- React Icons (for icons)
+- React Hook (for state management)
+- Framer Motion (for animations)
 
 ## Installation
 1. Clone the repository:
