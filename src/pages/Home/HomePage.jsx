@@ -99,13 +99,11 @@ function HomePage() {
 
     // Listens to new messages
     useEffect(() => {
-      
       const fetchRetrieveMessages = async () => {
         if(messageReceiver){
           try {
             const { apiUrl, options } = fetchMessage(messageReceiver.id, messageReceiver.class);
             await fetchMessages(apiUrl, options);
-            // setToScroll(true);
           } catch (error) {
             console.log('Error fetching messages', error)
           }
@@ -132,7 +130,6 @@ function HomePage() {
         });
       }
       if (userData) {
-        // setLoading(userLoading);
         localStorage.setItem('users', JSON.stringify(userData));
       }
     }, [userData, userError, userLoading, toast]);
@@ -150,7 +147,6 @@ function HomePage() {
         });
       }
       if (userChannelData) {
-
         // Define channels to display on sidebar
         if (userChannelData && Array.isArray(userChannelData.data)) {
           channelList = channelList.concat(userChannelData.data.map(channel => ({ id: channel.id, name: channel.name })));
@@ -204,7 +200,6 @@ function HomePage() {
             const dms = await fetchDirectMessages(dmUsers);
             if(dms) {
               const dm = dms.map(m => {
-
                 const receiverId = m.data[0].receiver.id;
                 const receiverName = m.data[0].receiver.uid;
                 const senderId = m.data[0].sender.id;
@@ -220,7 +215,6 @@ function HomePage() {
               });
               setDirectMessages(dm);
             }
-            // setDmLoading(false)
           } catch (error) {
             console.error('Failed to retrieve direct messages');
           }finally {
