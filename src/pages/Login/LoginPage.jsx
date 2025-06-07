@@ -90,10 +90,12 @@ const LoginPage = () => {
             m="auto" 
             textAlign="center"
             backgroundColor='white'
-            p={10}
+            p={[4, 6, 10]}
             borderRadius={5}
             boxShadow='md'
+            w={["90%", "80%", "auto"]}
           >
+
           <Flex 
             align="center" 
             justify="center" 
@@ -111,7 +113,7 @@ const LoginPage = () => {
                 Login
             </Heading>
             { alertMessage && (
-                <Alert status={alertMessage.type} mb={'4'} maxW="400px">
+                <Alert status={alertMessage.type} mb="4" maxW="400px" w="100%">
                     <AlertIcon />
                     {alertMessage.message}
                 </Alert>
@@ -125,7 +127,7 @@ const LoginPage = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="Enter your email"
-                    w="400px"
+                    w={["100%", "100%", "400px"]}
                 />
                 </FormControl>
                 <FormControl mb="4">
