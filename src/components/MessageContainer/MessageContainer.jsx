@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Box } from '@chakra-ui/layout';
-import MessageList from './MessageDisplay/MessageDisplay';
+import { Box } from '@chakra-ui/react';
 import MessageInput from './MessageInput/MessageInput';
 import MessageHeader from './MessageHeader/MessageHeader';
-import useFetch from '../../utils/hooks/useFetch';
-import { fetchMessage, sendMessage } from '../../services/api';
-import { Toast, useToast } from '@chakra-ui/react';
 import MessageDisplay from './MessageDisplay/MessageDisplay';
 import chatBg from '../../../public/chat-bg.jpg';
 
